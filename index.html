@@ -8,79 +8,61 @@
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
     
-    /* Header & Logo Setup */
-    header { 
-      background: #1e3c72; 
-      color: white; 
-      padding: 15px 20px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 15px; 
-      position: relative;
-    }
-    
+    header { background: #1e3c72; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: center; gap: 15px; }
     .logo-container { position: relative; width: 65px; height: 65px; cursor: pointer; }
     .logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #fff; background: #fff; }
     .logo-input { display: none; }
-    .logo-badge { 
-      position: absolute; bottom: 0; right: 0; background: #ffc107; color: #000; 
-      font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; 
-    }
+    .logo-badge { position: absolute; bottom: 0; right: 0; background: #ffc107; color: #000; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; }
 
-    .header-text { text-align: left; }
     .header-text h1 { margin: 0; font-size: 22px; }
     .header-text p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
 
     nav { background: #2a5298; display: flex; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap; }
-    nav button { background: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; transition: 0.3s; font-size: 13px; }
+    nav button { background: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; font-size: 13px; }
     nav button:hover, nav button.active-tab { background: #ffc107; color: #000; }
 
-    /* Layout Container */
     .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
     .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
     .card h2 { margin-top: 0; color: #1e3c72; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; font-size: 18px; }
 
-    /* Forms Design */
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; }
     .form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
     
-    .btn-submit { background: #28a745; color: white; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; transition: 0.2s; }
+    .btn-submit { background: #28a745; color: white; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; }
     .btn-submit:hover { background: #218838; }
-
-    /* Attendance Toggle Buttons */
-    .mode-btn-container { display: flex; gap: 10px; margin-bottom: 15px; }
-    .mode-btn { flex: 1; padding: 10px; border: 1px solid #1e3c72; background: white; color: #1e3c72; font-weight: bold; border-radius: 4px; cursor: pointer; text-align: center; }
-    .mode-btn.active { background: #1e3c72; color: white; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Tables */
     table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
     table th, table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
     table th { background-color: #1e3c72; color: white; }
     table tr:nth-child(even) { background-color: #f9f9f9; }
 
-    /* Alert Message */
     .status-msg { padding: 10px; margin-top: 10px; border-radius: 4px; display: none; font-weight: bold; text-align: center; }
     .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     .status-loading { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+
+    /* Payslip Style */
+    .payslip-box { border: 2px dashed #1e3c72; padding: 20px; border-radius: 8px; background: #fafafa; margin-top: 20px; }
+    .payslip-header { text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; }
+    @media print {
+      body * { visibility: hidden; }
+      #printablePayslip, #printablePayslip * { visibility: visible; }
+      #printablePayslip { position: absolute; left: 0; top: 0; width: 100%; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <!-- Logo Container -->
     <div class="logo-container" onclick="document.getElementById('logoInput').click()" title="ലോഗോ മാറ്റാൻ ക്ലിക്ക് ചെയ്യുക">
       <img id="schoolLogo" class="logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='65' height='65' viewBox='0 0 24 24' fill='none' stroke='%231e3c72' stroke-width='2'><path d='M12 3L1 9l11 6 9-4.91V17h2V9L12 3z'/><path d='M4 10v6c0 3 8 3 8 3s8 0 8-3v-6'/></svg>" alt="Logo">
       <span class="logo-badge">EDIT</span>
       <input type="file" id="logoInput" class="logo-input" accept="image/*" onchange="uploadLogo(event)">
     </div>
-
-    <!-- School Header Text -->
     <div class="header-text">
       <h1 id="displaySchoolName">സ്കൂൾ / മദ്രസ പേര് ലോഡ് ചെയ്യുന്നു...</h1>
       <p id="displaySchoolSub">മേൽവിലാസം & വിവരങ്ങൾ...</p>
@@ -96,124 +78,57 @@
   </nav>
 
   <div class="container">
-
     <div id="statusAlert" class="status-msg"></div>
 
-    <!-- TAB 1: Teacher Registration -->
+    <!-- TAB 1: Teachers -->
     <div id="teachers" class="tab-content active">
       <div class="card">
         <h2>അധ്യാപകരുടെ വിവരങ്ങൾ ചേർക്കുക (Teacher Registration)</h2>
         <form id="teacherForm" onsubmit="handleTeacherSubmit(event)">
           <div class="form-grid">
-            <div class="form-group">
-              <label>അഡ്മിഷൻ നമ്പർ (Adm No)</label>
-              <input type="text" id="admNo" required placeholder="Eg: T-101">
+            <div class="form-group"><label>Adm No</label><input type="text" id="admNo" required placeholder="Eg: T-101"></div>
+            <div class="form-group"><label>പേര്</label><input type="text" id="tName" required placeholder="Full Name"></div>
+            <div class="form-group"><label>ആധാർ നമ്പർ</label><input type="text" id="aadhaar" required maxlength="12"></div>
+            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phone" required></div>
+            <div class="form-group"><label>വിലാസം</label><input type="text" id="address" required></div>
+            <div class="form-group"><label>തസ്തിക</label>
+              <select id="designation"><option>Headmaster / Principal</option><option>Teacher</option><option>Staff</option></select>
             </div>
-            <div class="form-group">
-              <label>അധ്യാപകന്റെ പേര് (Full Name)</label>
-              <input type="text" id="tName" required placeholder="പേര് ടൈപ്പ് ചെയ്യുക">
-            </div>
-            <div class="form-group">
-              <label>ആധാർ നമ്പർ (Aadhaar No)</label>
-              <input type="text" id="aadhaar" required maxlength="12" placeholder="12 അക്ക ആധാർ">
-            </div>
-            <div class="form-group">
-              <label>ഫോൺ നമ്പർ (Phone)</label>
-              <input type="tel" id="phone" required placeholder="മൊബൈൽ നമ്പർ">
-            </div>
-            <div class="form-group">
-              <label>വിലാസം (Address)</label>
-              <input type="text" id="address" required placeholder="മേൽവിലാസം">
-            </div>
-            <div class="form-group">
-              <label>തസ്തിക (Designation)</label>
-              <select id="designation">
-                <option>Headmaster / Principal</option>
-                <option>Teacher</option>
-                <option>Staff</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>ജോയിനിംഗ് തീയതി (Joining Date)</label>
-              <input type="date" id="joiningDate" required>
-            </div>
+            <div class="form-group"><label>ജോയിനിംഗ് തീയതി</label><input type="date" id="joiningDate" required></div>
           </div>
           <button type="submit" class="btn-submit">ഡാറ്റാബേസിലേക്ക് സേവ് ചെയ്യുക</button>
         </form>
       </div>
-
       <div class="card">
         <h2>രജിസ്റ്റർ ചെയ്ത അധ്യാപകരുടെ ലിസ്റ്റ്</h2>
         <table id="teacherTable">
-          <thead>
-            <tr>
-              <th>Adm No</th>
-              <th>പേര്</th>
-              <th>തസ്തിക</th>
-              <th>ഫോൺ</th>
-              <th>ആധാർ നമ്പർ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="5" style="text-align:center;">ഡാറ്റ ലോഡ് ചെയ്യുന്നു...</td></tr>
-          </tbody>
+          <thead><tr><th>Adm No</th><th>പേര്</th><th>തസ്തിക</th><th>ഫോൺ</th><th>ആധാർ നമ്പർ</th></tr></thead>
+          <tbody><tr><td colspan="5" style="text-align:center;">ഡാറ്റ ലോഡ് ചെയ്യുന്നു...</td></tr></tbody>
         </table>
       </div>
     </div>
 
-    <!-- TAB 2: Attendance Section -->
+    <!-- TAB 2: Attendance -->
     <div id="attendance" class="tab-content">
       <div class="card">
-        <h2>അറ്റൻഡൻസ് രേഖപ്പെടുത്തുക (Attendance Register)</h2>
-        
-        <div class="mode-btn-container">
-          <div class="mode-btn active" id="btnManual" onclick="setAttendanceMode('manual')">⏱️ മാനുവൽ എൻട്രി (Manual In/Out)</div>
-          <div class="mode-btn" id="btnFinger" onclick="setAttendanceMode('finger')">👆 ഫിംഗർപ്രിന്റ് (Fingerprint)</div>
-        </div>
-
-        <!-- Manual Mode Form -->
-        <div id="manualModeBox">
-          <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>തീയതി (Date)</label>
-                <input type="date" id="attDate" required>
-              </div>
-              <div class="form-group">
-                <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
-                <select id="attTeacherSelect" required>
-                  <option value="">Select Teacher...</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>വന്ന സമയം (In Time)</label>
-                <input type="time" id="timeIn" required>
-              </div>
-              <div class="form-group">
-                <label>പോയ സമയം (Out Time)</label>
-                <input type="time" id="timeOut">
-              </div>
-              <div class="form-group">
-                <label>സ്റ്റാറ്റസ് (Status)</label>
-                <select id="attStatus">
-                  <option value="Present">Present (ഹാജർ)</option>
-                  <option value="Late">Late (വൈകി വന്നു)</option>
-                  <option value="Leave">Leave (ലീവ്)</option>
-                  <option value="Absent">Absent (ആബ്‌സന്റ്)</option>
-                </select>
-              </div>
+        <h2>അറ്റൻഡൻസ് രേഖപ്പെടുത്തുക</h2>
+        <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)">
+          <div class="form-grid">
+            <div class="form-group"><label>തീയതി</label><input type="date" id="attDate" required></div>
+            <div class="form-group"><label>ടീച്ചർ</label><select id="attTeacherSelect" required><option value="">Select Teacher...</option></select></div>
+            <div class="form-group"><label>വന്ന സമയം</label><input type="time" id="timeIn" required></div>
+            <div class="form-group"><label>പോയ സമയം</label><input type="time" id="timeOut"></div>
+            <div class="form-group"><label>സ്റ്റാറ്റസ്</label>
+              <select id="attStatus">
+                <option value="Present">Present (ഹാജർ)</option>
+                <option value="Late">Late (വൈകി വന്നു)</option>
+                <option value="Leave">Leave (ലീവ്)</option>
+                <option value="Absent">Absent (ആബ്‌സന്റ്)</option>
+              </select>
             </div>
-            <button type="submit" class="btn-submit" style="background: #1e3c72;">അറ്റൻഡൻസ് മാർക്ക് ചെയ്യുക</button>
-          </form>
-        </div>
-
-        <!-- Fingerprint Mode Box -->
-        <div id="fingerModeBox" style="display: none; text-align: center; padding: 30px;">
-          <div style="font-size: 60px;">👆</div>
-          <p>Mantra / SecuGen Fingerprint Scanner റീഡറിൽ വിരൽ വെക്കുക</p>
-          <button class="btn-submit" style="width: auto; background: #007bff;" onclick="scanFingerprint()">Scan Fingerprint Now</button>
-        </div>
-
+          </div>
+          <button type="submit" class="btn-submit" style="background: #1e3c72;">അറ്റൻഡൻസ് മാർക്ക് ചെയ്യുക</button>
+        </form>
       </div>
     </div>
 
@@ -223,47 +138,109 @@
         <h2>സാലറി ഘടന ഉണ്ടാക്കുക (Salary Master)</h2>
         <form id="salaryForm" onsubmit="handleSalarySubmit(event)">
           <div class="form-grid">
-            <div class="form-group">
-              <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
-              <select id="salTeacherSelect" required>
-                <option value="">Select Teacher...</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>ബേസിക് സാലറി (Basic Salary)</label>
-              <input type="number" id="basicSal" required oninput="calcNetSalary()">
-            </div>
-            <div class="form-group">
-              <label>അലവൻസുകൾ (Allowances)</label>
-              <input type="number" id="allowanceSal" value="0" oninput="calcNetSalary()">
-            </div>
-            <div class="form-group">
-              <label>പിടിത്തങ്ങൾ (Deductions)</label>
-              <input type="number" id="deductionSal" value="0" oninput="calcNetSalary()">
-            </div>
-            <div class="form-group">
-              <label>ആകെ ശമ്പളം (Net Salary)</label>
-              <input type="number" id="netSal" readonly style="background: #e9ecef; font-weight: bold;">
-            </div>
+            <div class="form-group"><label>ടീച്ചർ</label><select id="salTeacherSelect" required><option value="">Select Teacher...</option></select></div>
+            <div class="form-group"><label>Basic Salary</label><input type="number" id="basicSal" required oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Allowances</label><input type="number" id="allowanceSal" value="0" oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Deductions</label><input type="number" id="deductionSal" value="0" oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Net Salary</label><input type="number" id="netSal" readonly style="background: #e9ecef;"></div>
           </div>
-          <button type="submit" class="btn-submit">സാലറി സ്ട്രക്ചർ സേവ് ചെയ്യുക</button>
+          <button type="submit" class="btn-submit">സേവ് ചെയ്യുക</button>
         </form>
       </div>
     </div>
 
-    <!-- TAB 4 & 5 Placeholders -->
+    <!-- TAB 4: Salary Payments -->
     <div id="payments" class="tab-content">
-      <div class="card"><h2>സാലറി വിതരണം (Payment Register)</h2><p>സാലറി പേയ്‌മെന്റ് ബാക്കി ഭാഗങ്ങൾ റെഡിയാകുന്നു...</p></div>
+      <div class="card">
+        <h2>സാലറി വിതരണം (Payment Register)</h2>
+        <form id="paymentForm" onsubmit="handlePaymentSubmit(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
+              <select id="payTeacherSelect" required><option value="">Select Teacher...</option></select>
+            </div>
+            <div class="form-group">
+              <label>ഏത് മാസത്തെ ശമ്പളം (Month)</label>
+              <input type="month" id="payMonth" required>
+            </div>
+            <div class="form-group">
+              <label>നൽകുന്ന തുക (Paid Amount)</label>
+              <input type="number" id="payAmount" required placeholder="₹ 0">
+            </div>
+            <div class="form-group">
+              <label>പെയ്‌മെന്റ് രീതി (Payment Mode)</label>
+              <select id="payMode">
+                <option value="Cash">Cash (പണം)</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="UPI / GPay">UPI / GPay</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" style="background:#ff9800; color:#000;">സാലറി പേയ്‌മെന്റ് നൽകുക</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>പെയ്‌മെന്റ് ചരിത്രം (Payment History)</h2>
+        <table id="paymentsTable">
+          <thead>
+            <tr><th>തീയതി</th><th>Adm No</th><th>പേര്</th><th>മാസം</th><th>തുക</th><th>രീതി</th><th>സ്റ്റാറ്റസ്</th></tr>
+          </thead>
+          <tbody><tr><td colspan="7" style="text-align:center;">ലോഡ് ചെയ്യുന്നു...</td></tr></tbody>
+        </table>
+      </div>
     </div>
+
+    <!-- TAB 5: Reports & Payslip -->
     <div id="reports" class="tab-content">
-      <div class="card"><h2>റിപ്പോർട്ടുകൾ & പേസ്ലിപ്പ് (Reports)</h2><p>മന്ത്‌ലി അറ്റൻഡൻസ്, പേ സ്ലിപ്പ് റിപ്പോർട്ടുകൾ സജ്ജമാകുന്നു...</p></div>
+      <div class="card">
+        <h2>പേസ്ലിപ്പ് ജനറേറ്റർ (Payslip Generator)</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ടീച്ചർ</label>
+            <select id="reportTeacherSelect"><option value="">Select Teacher...</option></select>
+          </div>
+          <div class="form-group">
+            <label>മാസം</label>
+            <input type="month" id="reportMonth">
+          </div>
+        </div>
+        <button class="btn-submit" style="background:#007bff;" onclick="generatePayslip()">പേസ്ലിപ്പ് ഉണ്ടാക്കുക</button>
+      </div>
+
+      <div id="printablePayslip" class="payslip-box" style="display:none;">
+        <div class="payslip-header">
+          <h2 id="psSchoolName" style="margin:0;">-</h2>
+          <p id="psSchoolSub" style="margin:2px;">-</p>
+          <h4 style="margin:10px 0 0 0; color:#1e3c72;">SALARY PAYSLIP</h4>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:15px;">
+          <div>
+            <p><strong>ടീച്ചർ:</strong> <span id="psName">-</span></p>
+            <p><strong>Adm No:</strong> <span id="psAdmNo">-</span></p>
+          </div>
+          <div>
+            <p><strong>മാസം:</strong> <span id="psMonth">-</span></p>
+            <p><strong>തീയതി:</strong> <span id="psDate">-</span></p>
+          </div>
+        </div>
+        <table>
+          <tr><th>വിവരണം</th><th>തുക (₹)</th></tr>
+          <tr><td>പേയ്‌മെന്റ് തുക (Paid Amount)</td><td id="psAmount">0</td></tr>
+          <tr><td>സ്റ്റാറ്റസ്</td><td id="psStatus" style="color:green; font-weight:bold;">PAID</td></tr>
+        </table>
+        <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:12px;">
+          <p>തീയതി: ....................</p>
+          <p>അധികൃതരുടെ ഒപ്പ്: ....................</p>
+        </div>
+        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:15px;">🖨️ പ്രിന്റ് ചെയ്യുക / PDF ആക്കുക</button>
+      </div>
     </div>
 
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwAizP15oIjWDwJuUdfh6yNA9k9v4dbU7MeZf1WleUoWxrHfsNfpkircQ69DwUMS_jPA/exec";
-
     let teachersData = [];
 
     window.onload = function() {
@@ -271,69 +248,45 @@
       loadSavedLogo();
       loadSchoolDetails();
       loadTeachers();
+      loadPayments();
     };
 
-    // Load Permanent Logo
     function loadSavedLogo() {
       const savedLogo = localStorage.getItem('school_app_logo');
-      if (savedLogo) {
-        document.getElementById('schoolLogo').src = savedLogo;
-      }
+      if (savedLogo) document.getElementById('schoolLogo').src = savedLogo;
     }
 
-    // Upload & Save Logo Permanently
     function uploadLogo(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const logoData = e.target.result;
-          document.getElementById('schoolLogo').src = logoData;
-          localStorage.setItem('school_app_logo', logoData); // Save permanently in browser
-          showAlert("ലോഗോ സ്ഥിരമായി സേവ് ചെയ്തു!");
+          document.getElementById('schoolLogo').src = e.target.result;
+          localStorage.setItem('school_app_logo', e.target.result);
+          showAlert("ലോഗോ സേവ് ചെയ്തു!");
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // Fetch School Details from Google Sheet (SchoolDetails Tab)
     function loadSchoolDetails() {
       fetch(SCRIPT_URL + "?action=getSchoolDetails")
         .then(res => res.json())
         .then(data => {
-          if (data && data.length > 1) {
-            const row = data[1]; // First row after headers
-            document.getElementById('displaySchoolName').innerText = row[0] || 'School / Madrassa Name';
-            document.getElementById('displaySchoolSub').innerText = `${row[1] || ''} | Code: ${row[2] || ''} | ${row[4] || ''}`;
+          if (Array.isArray(data) && data.length > 1) {
+            const row = data[1];
+            if(row[0]) document.getElementById('displaySchoolName').innerText = row[0];
+            if(row[1]) document.getElementById('displaySchoolSub').innerText = `${row[1]} | Code: ${row[2] || ''}`;
           }
         })
-        .catch(err => {
-          console.error("Error loading school details:", err);
-          document.getElementById('displaySchoolName').innerText = "സ്കൂൾ & മദ്രസ സ്മാർട്ട് രജിസ്റ്റർ";
-          document.getElementById('displaySchoolSub').innerText = "ഡിജിറ്റൽ സ്റ്റാഫ് & അറ്റൻഡൻസ് മാനേജ്‌മെന്റ് സിസ്റ്റം";
-        });
+        .catch(err => console.error("Error loading details", err));
     }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
-      
       document.getElementById(tabId).classList.add('active');
       document.getElementById('tab-btn-' + tabId).classList.add('active-tab');
-    }
-
-    function setAttendanceMode(mode) {
-      if(mode === 'manual') {
-        document.getElementById('manualModeBox').style.display = 'block';
-        document.getElementById('fingerModeBox').style.display = 'none';
-        document.getElementById('btnManual').classList.add('active');
-        document.getElementById('btnFinger').classList.remove('active');
-      } else {
-        document.getElementById('manualModeBox').style.display = 'none';
-        document.getElementById('fingerModeBox').style.display = 'block';
-        document.getElementById('btnFinger').classList.add('active');
-        document.getElementById('btnManual').classList.remove('active');
-      }
     }
 
     function showAlert(msg, isSuccess = true) {
@@ -348,49 +301,42 @@
       fetch(SCRIPT_URL + "?action=getTeachers")
         .then(res => res.json())
         .then(data => {
-          teachersData = data.slice(1);
-          populateTeacherDropdowns();
-          renderTeacherTable();
-        })
-        .catch(err => console.error("Error loading teachers:", err));
+          if (Array.isArray(data) && data.length > 1) {
+            teachersData = data.slice(1);
+            populateTeacherDropdowns();
+            renderTeacherTable();
+          }
+        });
     }
 
     function populateTeacherDropdowns() {
-      const attSelect = document.getElementById('attTeacherSelect');
-      const salSelect = document.getElementById('salTeacherSelect');
-      
-      attSelect.innerHTML = '<option value="">Select Teacher...</option>';
-      salSelect.innerHTML = '<option value="">Select Teacher...</option>';
+      const selects = [
+        document.getElementById('attTeacherSelect'),
+        document.getElementById('salTeacherSelect'),
+        document.getElementById('payTeacherSelect'),
+        document.getElementById('reportTeacherSelect')
+      ];
 
-      teachersData.forEach(row => {
-        let opt = `<option value="${row[0]}" data-name="${row[1]}">${row[0]} - ${row[1]}</option>`;
-        attSelect.innerHTML += opt;
-        salSelect.innerHTML += opt;
+      selects.forEach(select => {
+        if(!select) return;
+        select.innerHTML = '<option value="">Select Teacher...</option>';
+        teachersData.forEach(row => {
+          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}">${row[0]} - ${row[1]}</option>`;
+        });
       });
     }
 
     function renderTeacherTable() {
       const tbody = document.querySelector('#teacherTable tbody');
-      if(teachersData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">അധ്യാപകരുടെ ഡാറ്റ ലഭ്യമല്ല.</td></tr>';
-        return;
-      }
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr>
-          <td>${row[0]}</td>
-          <td>${row[1]}</td>
-          <td>${row[5]}</td>
-          <td>${row[4]}</td>
-          <td>${row[2]}</td>
-        </tr>`;
+        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[3]}</td><td>${row[2]}</td></tr>`;
       });
     }
 
     function handleTeacherSubmit(e) {
       e.preventDefault();
-      showAlert("ഡാറ്റ സേവ് ചെയ്യുന്നു...", false);
-
+      showAlert("സേവ് ചെയ്യുന്നു...", false);
       const payload = {
         action: "saveTeacher",
         admNo: document.getElementById('admNo').value,
@@ -401,85 +347,111 @@
         designation: document.getElementById('designation').value,
         joiningDate: document.getElementById('joiningDate').value
       };
-
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.text())
-      .then(res => {
-        showAlert("ടീച്ചർ ഡാറ്റ വിജയകരമായി സേവ് ചെയ്തു!");
-        document.getElementById('teacherForm').reset();
-        loadTeachers();
-      });
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(() => { showAlert("സേവ് ചെയ്തു!"); document.getElementById('teacherForm').reset(); loadTeachers(); });
     }
 
     function handleAttendanceSubmit(e) {
       e.preventDefault();
-      showAlert("അറ്റൻഡൻസ് സേവ് ചെയ്യുന്നു...", false);
-
-      const select = document.getElementById('attTeacherSelect');
-      const teacherName = select.options[select.selectedIndex].getAttribute('data-name');
-
+      showAlert("സേവ് ചെയ്യുന്നു...", false);
+      const sel = document.getElementById('attTeacherSelect');
       const payload = {
         action: "markAttendance",
         date: document.getElementById('attDate').value,
-        admNo: select.value,
-        name: teacherName,
+        admNo: sel.value,
+        name: sel.options[sel.selectedIndex].getAttribute('data-name'),
         timeIn: document.getElementById('timeIn').value,
         timeOut: document.getElementById('timeOut').value,
         status: document.getElementById('attStatus').value,
         entryMode: "Manual"
       };
-
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.text())
-      .then(res => {
-        showAlert("അറ്റൻഡൻസ് വിജയകരമായി മാർക്ക് ചെയ്തു!");
-        document.getElementById('attendanceForm').reset();
-      });
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(() => { showAlert("അറ്റൻഡൻസ് രേഖപ്പെടുത്തി!"); document.getElementById('attendanceForm').reset(); });
     }
 
     function calcNetSalary() {
-      const basic = parseFloat(document.getElementById('basicSal').value) || 0;
-      const allowance = parseFloat(document.getElementById('allowanceSal').value) || 0;
-      const deduction = parseFloat(document.getElementById('deductionSal').value) || 0;
-      document.getElementById('netSal').value = basic + allowance - deduction;
+      const b = parseFloat(document.getElementById('basicSal').value) || 0;
+      const a = parseFloat(document.getElementById('allowanceSal').value) || 0;
+      const d = parseFloat(document.getElementById('deductionSal').value) || 0;
+      document.getElementById('netSal').value = b + a - d;
     }
 
     function handleSalarySubmit(e) {
       e.preventDefault();
-      showAlert("സാലറി വിവരങ്ങൾ സേവ് ചെയ്യുന്നു...", false);
-
-      const select = document.getElementById('salTeacherSelect');
-      const teacherName = select.options[select.selectedIndex].getAttribute('data-name');
-
+      showAlert("സേവ് ചെയ്യുന്നു...", false);
+      const sel = document.getElementById('salTeacherSelect');
       const payload = {
         action: "saveSalary",
-        admNo: select.value,
-        name: teacherName,
+        admNo: sel.value,
+        name: sel.options[sel.selectedIndex].getAttribute('data-name'),
         basic: document.getElementById('basicSal').value,
         allowance: document.getElementById('allowanceSal').value,
         deduction: document.getElementById('deductionSal').value,
         netSalary: document.getElementById('netSal').value
       };
-
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.text())
-      .then(res => {
-        showAlert("സാലറി മാസ്റ്റർ വിജയകരമായി അപ്‌ഡേറ്റ് ചെയ്തു!");
-        document.getElementById('salaryForm').reset();
-      });
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(() => { showAlert("സാലറി മാസ്റ്റർ സേവ് ചെയ്തു!"); document.getElementById('salaryForm').reset(); });
     }
 
-    function scanFingerprint() {
-      alert("Mantra/SecuGen RD Service ഡ്രൈവർ കണക്റ്റ് ചെയ്താൽ ഫിംഗർപ്രിന്റ് റെക്കോർഡ് സിസ്റ്റത്തിൽ ലോഗിൻ ആകും.");
+    /* Tab 4 Logic */
+    function handlePaymentSubmit(e) {
+      e.preventDefault();
+      showAlert("സാലറി പേയ്‌മെന്റ് റെക്കോർഡ് ചെയ്യുന്നു...", false);
+      const sel = document.getElementById('payTeacherSelect');
+      const payload = {
+        action: "savePayment",
+        admNo: sel.value,
+        name: sel.options[sel.selectedIndex].getAttribute('data-name'),
+        month: document.getElementById('payMonth').value,
+        amount: document.getElementById('payAmount').value,
+        payMode: document.getElementById('payMode').value,
+        status: "Paid"
+      };
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(() => { showAlert("പേയ്‌മെന്റ് സേവ് ചെയ്തു!"); document.getElementById('paymentForm').reset(); loadPayments(); });
+    }
+
+    function loadPayments() {
+      fetch(SCRIPT_URL + "?action=getPayments")
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#paymentsTable tbody');
+          tbody.innerHTML = '';
+          if (Array.isArray(data) && data.length > 1) {
+            data.slice(1).forEach(row => {
+              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>₹${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
+            });
+          } else {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">പേയ്‌മെന്റുകൾ ഒന്നും ഇതുവരെ നൽകിയിട്ടില്ല.</td></tr>';
+          }
+        });
+    }
+
+    /* Tab 5 Logic */
+    function generatePayslip() {
+      const sel = document.getElementById('reportTeacherSelect');
+      const month = document.getElementById('reportMonth').value;
+      if(!sel.value || !month) { alert("ടീച്ചറെയും മാസത്തെയും തിരഞ്ഞെടുക്കുക"); return; }
+
+      document.getElementById('psSchoolName').innerText = document.getElementById('displaySchoolName').innerText;
+      document.getElementById('psSchoolSub').innerText = document.getElementById('displaySchoolSub').innerText;
+      document.getElementById('psName').innerText = sel.options[sel.selectedIndex].getAttribute('data-name');
+      document.getElementById('psAdmNo').innerText = sel.value;
+      document.getElementById('psMonth').innerText = month;
+      document.getElementById('psDate').innerText = new Date().toLocaleDateString();
+
+      // Get payments for this teacher and month
+      fetch(SCRIPT_URL + "?action=getPayments")
+        .then(res => res.json())
+        .then(data => {
+          let paidAmount = "0";
+          if (Array.isArray(data) && data.length > 1) {
+            const match = data.find(r => r[1] == sel.value && r[3] == month);
+            if(match) paidAmount = match[4];
+          }
+          document.getElementById('psAmount').innerText = "₹ " + paidAmount;
+          document.getElementById('printablePayslip').style.display = 'block';
+        });
     }
   </script>
 </body>
