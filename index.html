@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School & Madrassa Smart Register</title>
+  <title>Smart Register - Attendance & Payroll Management</title>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
@@ -58,23 +58,23 @@
 <body>
 
   <header>
-    <div class="logo-container" onclick="document.getElementById('logoInput').click()" title="ലോഗോ മാറ്റാൻ ക്ലിക്ക് ചെയ്യുക">
+    <div class="logo-container" onclick="document.getElementById('logoInput').click()" title="Click to Change Logo">
       <img id="schoolLogo" class="logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='65' height='65' viewBox='0 0 24 24' fill='none' stroke='%231e3c72' stroke-width='2'><path d='M12 3L1 9l11 6 9-4.91V17h2V9L12 3z'/><path d='M4 10v6c0 3 8 3 8 3s8 0 8-3v-6'/></svg>" alt="Logo">
       <span class="logo-badge">EDIT</span>
       <input type="file" id="logoInput" class="logo-input" accept="image/*" onchange="uploadLogo(event)">
     </div>
     <div class="header-text">
-      <h1 id="displaySchoolName">സ്കൂൾ / മദ്രസ പേര് ലോഡ് ചെയ്യുന്നു...</h1>
-      <p id="displaySchoolSub">മേൽവിലാസം & വിവരങ്ങൾ...</p>
+      <h1 id="displaySchoolName">Loading Institution Name...</h1>
+      <p id="displaySchoolSub">Address & Details...</p>
     </div>
   </header>
 
   <nav>
-    <button id="tab-btn-teachers" class="active-tab" onclick="switchTab('teachers')">1. ടീച്ചേഴ്സ് രജിസ്ട്രേഷൻ</button>
-    <button id="tab-btn-attendance" onclick="switchTab('attendance')">2. അറ്റൻഡൻസ് Puncher</button>
-    <button id="tab-btn-salary" onclick="switchTab('salary')">3. സാലറി മാസ്റ്റർ</button>
-    <button id="tab-btn-payments" onclick="switchTab('payments')">4. സാലറി പേയ്‌മെന്റ്സ്</button>
-    <button id="tab-btn-reports" onclick="switchTab('reports')">5. റിപ്പോർട്ടുകൾ</button>
+    <button id="tab-btn-teachers" class="active-tab" onclick="switchTab('teachers')">1. Teacher Registration</button>
+    <button id="tab-btn-attendance" onclick="switchTab('attendance')">2. Attendance Puncher</button>
+    <button id="tab-btn-salary" onclick="switchTab('salary')">3. Salary Master</button>
+    <button id="tab-btn-payments" onclick="switchTab('payments')">4. Salary Payments</button>
+    <button id="tab-btn-reports" onclick="switchTab('reports')">5. Reports & Payslips</button>
   </nav>
 
   <div class="container">
@@ -83,27 +83,39 @@
     <!-- TAB 1: Teachers -->
     <div id="teachers" class="tab-content active">
       <div class="card">
-        <h2>അധ്യാപകരുടെ വിവരങ്ങൾ ചേർക്കുക (Teacher Registration)</h2>
+        <h2>Teacher Registration Form</h2>
         <form id="teacherForm" onsubmit="handleTeacherSubmit(event)">
           <div class="form-grid">
-            <div class="form-group"><label>Adm No</label><input type="text" id="admNo" required placeholder="Eg: T-101"></div>
-            <div class="form-group"><label>പേര്</label><input type="text" id="tName" required placeholder="Full Name"></div>
-            <div class="form-group"><label>ആധാർ നമ്പർ</label><input type="text" id="aadhaar" required maxlength="12"></div>
-            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phone" required></div>
-            <div class="form-group"><label>വിലാസം</label><input type="text" id="address" required></div>
-            <div class="form-group"><label>തസ്തിക</label>
-              <select id="designation"><option>Headmaster / Principal</option><option>Teacher</option><option>Staff</option></select>
+            <div class="form-group"><label>Admission No</label><input type="text" id="admNo" required placeholder="Eg: T-101"></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="tName" required placeholder="Full Name"></div>
+            <div class="form-group"><label>Aadhaar Number</label><input type="text" id="aadhaar" required maxlength="12" placeholder="12 Digit Number"></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required placeholder="Mobile Number"></div>
+            <div class="form-group"><label>Address</label><input type="text" id="address" required placeholder="Location / Address"></div>
+            <div class="form-group"><label>Designation</label>
+              <select id="designation">
+                <option value="Headmaster / Principal">Headmaster / Principal</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Staff">Staff</option>
+              </select>
             </div>
-            <div class="form-group"><label>ജോയിനിംഗ് തീയതി</label><input type="date" id="joiningDate" required></div>
+            <div class="form-group"><label>Joining Date</label><input type="date" id="joiningDate" required></div>
           </div>
-          <button type="submit" class="btn-submit">ഡാറ്റാബേസിലേക്ക് സേവ് ചെയ്യുക</button>
+          <button type="submit" class="btn-submit">Save Teacher Record</button>
         </form>
       </div>
       <div class="card">
-        <h2>രജിസ്റ്റർ ചെയ്ത അധ്യാപകരുടെ ലിസ്റ്റ്</h2>
+        <h2>Registered Teachers Directory</h2>
         <table id="teacherTable">
-          <thead><tr><th>Adm No</th><th>പേര്</th><th>തസ്തിക</th><th>ഫോൺ</th><th>ആധാർ നമ്പർ</th></tr></thead>
-          <tbody><tr><td colspan="5" style="text-align:center;">ഡാറ്റ ലോഡ് ചെയ്യുന്നു...</td></tr></tbody>
+          <thead>
+            <tr>
+              <th>Adm No</th>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Address</th>
+              <th>Aadhaar Number</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="5" style="text-align:center;">Loading data...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -111,23 +123,23 @@
     <!-- TAB 2: Attendance -->
     <div id="attendance" class="tab-content">
       <div class="card">
-        <h2>അറ്റൻഡൻസ് രേഖപ്പെടുത്തുക</h2>
+        <h2>Mark Daily Attendance</h2>
         <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)">
           <div class="form-grid">
-            <div class="form-group"><label>തീയതി</label><input type="date" id="attDate" required></div>
-            <div class="form-group"><label>ടീച്ചർ</label><select id="attTeacherSelect" required><option value="">Select Teacher...</option></select></div>
-            <div class="form-group"><label>വന്ന സമയം</label><input type="time" id="timeIn" required></div>
-            <div class="form-group"><label>പോയ സമയം</label><input type="time" id="timeOut"></div>
-            <div class="form-group"><label>സ്റ്റാറ്റസ്</label>
+            <div class="form-group"><label>Date</label><input type="date" id="attDate" required></div>
+            <div class="form-group"><label>Select Teacher</label><select id="attTeacherSelect" required><option value="">Select Teacher...</option></select></div>
+            <div class="form-group"><label>Time In</label><input type="time" id="timeIn" required></div>
+            <div class="form-group"><label>Time Out</label><input type="time" id="timeOut"></div>
+            <div class="form-group"><label>Status</label>
               <select id="attStatus">
-                <option value="Present">Present (ഹാജർ)</option>
-                <option value="Late">Late (വൈകി വന്നു)</option>
-                <option value="Leave">Leave (ലീവ്)</option>
-                <option value="Absent">Absent (ആബ്‌സന്റ്)</option>
+                <option value="Present">Present</option>
+                <option value="Late">Late</option>
+                <option value="Leave">Leave</option>
+                <option value="Absent">Absent</option>
               </select>
             </div>
           </div>
-          <button type="submit" class="btn-submit" style="background: #1e3c72;">അറ്റൻഡൻസ് മാർക്ക് ചെയ്യുക</button>
+          <button type="submit" class="btn-submit" style="background: #1e3c72;">Mark Attendance</button>
         </form>
       </div>
     </div>
@@ -135,16 +147,16 @@
     <!-- TAB 3: Salary Master -->
     <div id="salary" class="tab-content">
       <div class="card">
-        <h2>സാലറി ഘടന ഉണ്ടാക്കുക (Salary Master)</h2>
+        <h2>Salary Master Structure</h2>
         <form id="salaryForm" onsubmit="handleSalarySubmit(event)">
           <div class="form-grid">
-            <div class="form-group"><label>ടീച്ചർ</label><select id="salTeacherSelect" required><option value="">Select Teacher...</option></select></div>
-            <div class="form-group"><label>Basic Salary</label><input type="number" id="basicSal" required oninput="calcNetSalary()"></div>
-            <div class="form-group"><label>Allowances</label><input type="number" id="allowanceSal" value="0" oninput="calcNetSalary()"></div>
-            <div class="form-group"><label>Deductions</label><input type="number" id="deductionSal" value="0" oninput="calcNetSalary()"></div>
-            <div class="form-group"><label>Net Salary</label><input type="number" id="netSal" readonly style="background: #e9ecef;"></div>
+            <div class="form-group"><label>Select Teacher</label><select id="salTeacherSelect" required><option value="">Select Teacher...</option></select></div>
+            <div class="form-group"><label>Basic Salary (₹)</label><input type="number" id="basicSal" required oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Allowances (₹)</label><input type="number" id="allowanceSal" value="0" oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Deductions (₹)</label><input type="number" id="deductionSal" value="0" oninput="calcNetSalary()"></div>
+            <div class="form-group"><label>Net Salary (₹)</label><input type="number" id="netSal" readonly style="background: #e9ecef;"></div>
           </div>
-          <button type="submit" class="btn-submit">സേവ് ചെയ്യുക</button>
+          <button type="submit" class="btn-submit">Save Salary Structure</button>
         </form>
       </div>
     </div>
@@ -152,41 +164,41 @@
     <!-- TAB 4: Salary Payments -->
     <div id="payments" class="tab-content">
       <div class="card">
-        <h2>സാലറി വിതരണം (Payment Register)</h2>
+        <h2>Salary Payment Register</h2>
         <form id="paymentForm" onsubmit="handlePaymentSubmit(event)">
           <div class="form-grid">
             <div class="form-group">
-              <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
+              <label>Select Teacher</label>
               <select id="payTeacherSelect" required><option value="">Select Teacher...</option></select>
             </div>
             <div class="form-group">
-              <label>ഏത് മാസത്തെ ശമ്പളം (Month)</label>
+              <label>Payment Month</label>
               <input type="month" id="payMonth" required>
             </div>
             <div class="form-group">
-              <label>നൽകുന്ന തുക (Paid Amount)</label>
+              <label>Paid Amount (₹)</label>
               <input type="number" id="payAmount" required placeholder="₹ 0">
             </div>
             <div class="form-group">
-              <label>പെയ്‌മെന്റ് രീതി (Payment Mode)</label>
+              <label>Payment Mode</label>
               <select id="payMode">
-                <option value="Cash">Cash (പണം)</option>
+                <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option>
                 <option value="UPI / GPay">UPI / GPay</option>
               </select>
             </div>
           </div>
-          <button type="submit" class="btn-submit" style="background:#ff9800; color:#000;">സാലറി പേയ്‌മെന്റ് നൽകുക</button>
+          <button type="submit" class="btn-submit" style="background:#ff9800; color:#000;">Submit Payment</button>
         </form>
       </div>
 
       <div class="card">
-        <h2>പെയ്‌മെന്റ് ചരിത്രം (Payment History)</h2>
+        <h2>Payment History</h2>
         <table id="paymentsTable">
           <thead>
-            <tr><th>തീയതി</th><th>Adm No</th><th>പേര്</th><th>മാസം</th><th>തുക</th><th>രീതി</th><th>സ്റ്റാറ്റസ്</th></tr>
+            <tr><th>Date</th><th>Adm No</th><th>Name</th><th>Month</th><th>Amount</th><th>Mode</th><th>Status</th></tr>
           </thead>
-          <tbody><tr><td colspan="7" style="text-align:center;">ലോഡ് ചെയ്യുന്നു...</td></tr></tbody>
+          <tbody><tr><td colspan="7" style="text-align:center;">Loading payments...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -194,18 +206,18 @@
     <!-- TAB 5: Reports & Payslip -->
     <div id="reports" class="tab-content">
       <div class="card">
-        <h2>പേസ്ലിപ്പ് ജനറേറ്റർ (Payslip Generator)</h2>
+        <h2>Payslip Generator</h2>
         <div class="form-grid">
           <div class="form-group">
-            <label>ടീച്ചർ</label>
+            <label>Select Teacher</label>
             <select id="reportTeacherSelect"><option value="">Select Teacher...</option></select>
           </div>
           <div class="form-group">
-            <label>മാസം</label>
+            <label>Select Month</label>
             <input type="month" id="reportMonth">
           </div>
         </div>
-        <button class="btn-submit" style="background:#007bff;" onclick="generatePayslip()">പേസ്ലിപ്പ് ഉണ്ടാക്കുക</button>
+        <button class="btn-submit" style="background:#007bff;" onclick="generatePayslip()">Generate Payslip</button>
       </div>
 
       <div id="printablePayslip" class="payslip-box" style="display:none;">
@@ -216,24 +228,24 @@
         </div>
         <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:15px;">
           <div>
-            <p><strong>ടീച്ചർ:</strong> <span id="psName">-</span></p>
+            <p><strong>Teacher:</strong> <span id="psName">-</span></p>
             <p><strong>Adm No:</strong> <span id="psAdmNo">-</span></p>
           </div>
           <div>
-            <p><strong>മാസം:</strong> <span id="psMonth">-</span></p>
-            <p><strong>തീയതി:</strong> <span id="psDate">-</span></p>
+            <p><strong>Month:</strong> <span id="psMonth">-</span></p>
+            <p><strong>Issued Date:</strong> <span id="psDate">-</span></p>
           </div>
         </div>
         <table>
-          <tr><th>വിവരണം</th><th>തുക (₹)</th></tr>
-          <tr><td>പേയ്‌മെന്റ് തുക (Paid Amount)</td><td id="psAmount">0</td></tr>
-          <tr><td>സ്റ്റാറ്റസ്</td><td id="psStatus" style="color:green; font-weight:bold;">PAID</td></tr>
+          <tr><th>Description</th><th>Amount (₹)</th></tr>
+          <tr><td>Paid Salary Amount</td><td id="psAmount">0</td></tr>
+          <tr><td>Status</td><td id="psStatus" style="color:green; font-weight:bold;">PAID</td></tr>
         </table>
         <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:12px;">
-          <p>തീയതി: ....................</p>
-          <p>അധികൃതരുടെ ഒപ്പ്: ....................</p>
+          <p>Date: ....................</p>
+          <p>Authorized Signature: ....................</p>
         </div>
-        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:15px;">🖨️ പ്രിന്റ് ചെയ്യുക / PDF ആക്കുക</button>
+        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:15px;">🖨️ Print / Save as PDF</button>
       </div>
     </div>
 
@@ -263,7 +275,7 @@
         reader.onload = function(e) {
           document.getElementById('schoolLogo').src = e.target.result;
           localStorage.setItem('school_app_logo', e.target.result);
-          showAlert("ലോഗോ സേവ് ചെയ്തു!");
+          showAlert("Logo updated successfully!");
         };
         reader.readAsDataURL(file);
       }
@@ -277,6 +289,9 @@
             const row = data[1];
             if(row[0]) document.getElementById('displaySchoolName').innerText = row[0];
             if(row[1]) document.getElementById('displaySchoolSub').innerText = `${row[1]} | Code: ${row[2] || ''}`;
+          } else {
+            document.getElementById('displaySchoolName').innerText = "Smart Register";
+            document.getElementById('displaySchoolSub').innerText = "Staff & Attendance Management System";
           }
         })
         .catch(err => console.error("Error loading details", err));
@@ -305,7 +320,12 @@
             teachersData = data.slice(1);
             populateTeacherDropdowns();
             renderTeacherTable();
+          } else {
+            document.querySelector('#teacherTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;">No teacher records found.</td></tr>';
           }
+        })
+        .catch(err => {
+          document.querySelector('#teacherTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Failed to load data!</td></tr>';
         });
     }
 
@@ -330,13 +350,13 @@
       const tbody = document.querySelector('#teacherTable tbody');
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[3]}</td><td>${row[2]}</td></tr>`;
+        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[4]}</td><td>${row[2]}</td></tr>`;
       });
     }
 
     function handleTeacherSubmit(e) {
       e.preventDefault();
-      showAlert("സേവ് ചെയ്യുന്നു...", false);
+      showAlert("Saving teacher record...", false);
       const payload = {
         action: "saveTeacher",
         admNo: document.getElementById('admNo').value,
@@ -348,12 +368,16 @@
         joiningDate: document.getElementById('joiningDate').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { showAlert("സേവ് ചെയ്തു!"); document.getElementById('teacherForm').reset(); loadTeachers(); });
+        .then(() => { 
+          showAlert("Teacher registered successfully!"); 
+          document.getElementById('teacherForm').reset(); 
+          loadTeachers(); 
+        });
     }
 
     function handleAttendanceSubmit(e) {
       e.preventDefault();
-      showAlert("സേവ് ചെയ്യുന്നു...", false);
+      showAlert("Marking attendance...", false);
       const sel = document.getElementById('attTeacherSelect');
       const payload = {
         action: "markAttendance",
@@ -366,7 +390,7 @@
         entryMode: "Manual"
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { showAlert("അറ്റൻഡൻസ് രേഖപ്പെടുത്തി!"); document.getElementById('attendanceForm').reset(); });
+        .then(() => { showAlert("Attendance marked successfully!"); document.getElementById('attendanceForm').reset(); });
     }
 
     function calcNetSalary() {
@@ -378,7 +402,7 @@
 
     function handleSalarySubmit(e) {
       e.preventDefault();
-      showAlert("സേവ് ചെയ്യുന്നു...", false);
+      showAlert("Saving salary structure...", false);
       const sel = document.getElementById('salTeacherSelect');
       const payload = {
         action: "saveSalary",
@@ -390,13 +414,12 @@
         netSalary: document.getElementById('netSal').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { showAlert("സാലറി മാസ്റ്റർ സേവ് ചെയ്തു!"); document.getElementById('salaryForm').reset(); });
+        .then(() => { showAlert("Salary structure saved!"); document.getElementById('salaryForm').reset(); });
     }
 
-    /* Tab 4 Logic */
     function handlePaymentSubmit(e) {
       e.preventDefault();
-      showAlert("സാലറി പേയ്‌മെന്റ് റെക്കോർഡ് ചെയ്യുന്നു...", false);
+      showAlert("Recording payment...", false);
       const sel = document.getElementById('payTeacherSelect');
       const payload = {
         action: "savePayment",
@@ -408,7 +431,7 @@
         status: "Paid"
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { showAlert("പേയ്‌മെന്റ് സേവ് ചെയ്തു!"); document.getElementById('paymentForm').reset(); loadPayments(); });
+        .then(() => { showAlert("Payment recorded successfully!"); document.getElementById('paymentForm').reset(); loadPayments(); });
     }
 
     function loadPayments() {
@@ -422,16 +445,15 @@
               tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>₹${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">പേയ്‌മെന്റുകൾ ഒന്നും ഇതുവരെ നൽകിയിട്ടില്ല.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment records found.</td></tr>';
           }
         });
     }
 
-    /* Tab 5 Logic */
     function generatePayslip() {
       const sel = document.getElementById('reportTeacherSelect');
       const month = document.getElementById('reportMonth').value;
-      if(!sel.value || !month) { alert("ടീച്ചറെയും മാസത്തെയും തിരഞ്ഞെടുക്കുക"); return; }
+      if(!sel.value || !month) { alert("Please select both teacher and month."); return; }
 
       document.getElementById('psSchoolName').innerText = document.getElementById('displaySchoolName').innerText;
       document.getElementById('psSchoolSub').innerText = document.getElementById('displaySchoolSub').innerText;
@@ -440,7 +462,6 @@
       document.getElementById('psMonth').innerText = month;
       document.getElementById('psDate').innerText = new Date().toLocaleDateString();
 
-      // Get payments for this teacher and month
       fetch(SCRIPT_URL + "?action=getPayments")
         .then(res => res.json())
         .then(data => {
