@@ -8,11 +8,30 @@
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
     
-    /* Header & Navigation */
-    header { background: #1e3c72; color: white; padding: 15px 20px; text-align: center; }
-    header h1 { margin: 0; font-size: 22px; }
-    header p { margin: 5px 0 0; font-size: 13px; opacity: 0.8; }
+    /* Header & Logo Setup */
+    header { 
+      background: #1e3c72; 
+      color: white; 
+      padding: 15px 20px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 15px; 
+      position: relative;
+    }
     
+    .logo-container { position: relative; width: 65px; height: 65px; cursor: pointer; }
+    .logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #fff; background: #fff; }
+    .logo-input { display: none; }
+    .logo-badge { 
+      position: absolute; bottom: 0; right: 0; background: #ffc107; color: #000; 
+      font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; 
+    }
+
+    .header-text { text-align: left; }
+    .header-text h1 { margin: 0; font-size: 22px; }
+    .header-text p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
+
     nav { background: #2a5298; display: flex; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap; }
     nav button { background: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; transition: 0.3s; font-size: 13px; }
     nav button:hover, nav button.active-tab { background: #ffc107; color: #000; }
@@ -54,8 +73,18 @@
 <body>
 
   <header>
-    <h1>സ്കൂൾ & മദ്രസ സ്മാർട്ട് രജിസ്റ്റർ</h1>
-    <p>ഡിജിറ്റൽ സ്റ്റാഫ് & അറ്റൻഡൻസ് മാനേജ്‌മെന്റ് സിസ്റ്റം</p>
+    <!-- Logo Container -->
+    <div class="logo-container" onclick="document.getElementById('logoInput').click()" title="ലോഗോ മാറ്റാൻ ക്ലിക്ക് ചെയ്യുക">
+      <img id="schoolLogo" class="logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='65' height='65' viewBox='0 0 24 24' fill='none' stroke='%231e3c72' stroke-width='2'><path d='M12 3L1 9l11 6 9-4.91V17h2V9L12 3z'/><path d='M4 10v6c0 3 8 3 8 3s8 0 8-3v-6'/></svg>" alt="Logo">
+      <span class="logo-badge">EDIT</span>
+      <input type="file" id="logoInput" class="logo-input" accept="image/*" onchange="uploadLogo(event)">
+    </div>
+
+    <!-- School Header Text -->
+    <div class="header-text">
+      <h1 id="displaySchoolName">സ്കൂൾ / മദ്രസ പേര് ലോഡ് ചെയ്യുന്നു...</h1>
+      <p id="displaySchoolSub">മേൽവിലാസം & വിവരങ്ങൾ...</p>
+    </div>
   </header>
 
   <nav>
@@ -151,7 +180,7 @@
                 <input type="date" id="attDate" required>
               </div>
               <div class="form-group">
-                <label>ടിച്ച് റെ തിരഞ്ഞെടുക്കുക</label>
+                <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
                 <select id="attTeacherSelect" required>
                   <option value="">Select Teacher...</option>
                 </select>
@@ -196,7 +225,7 @@
           <div class="form-grid">
             <div class="form-group">
               <label>ടീച്ചറെ തിരഞ്ഞെടുക്കുക</label>
-              <select id="salTeacherSelect" required onchange="updateSalaryTeacherName()">
+              <select id="salTeacherSelect" required>
                 <option value="">Select Teacher...</option>
               </select>
             </div>
@@ -233,15 +262,57 @@
   </div>
 
   <script>
-    // Google Apps Script API URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwAizP15oIjWDwJuUdfh6yNA9k9v4dbU7MeZf1WleUoWxrHfsNfpkircQ69DwUMS_jPA/exec";
 
     let teachersData = [];
 
     window.onload = function() {
       document.getElementById('attDate').valueAsDate = new Date();
+      loadSavedLogo();
+      loadSchoolDetails();
       loadTeachers();
     };
+
+    // Load Permanent Logo
+    function loadSavedLogo() {
+      const savedLogo = localStorage.getItem('school_app_logo');
+      if (savedLogo) {
+        document.getElementById('schoolLogo').src = savedLogo;
+      }
+    }
+
+    // Upload & Save Logo Permanently
+    function uploadLogo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const logoData = e.target.result;
+          document.getElementById('schoolLogo').src = logoData;
+          localStorage.setItem('school_app_logo', logoData); // Save permanently in browser
+          showAlert("ലോഗോ സ്ഥിരമായി സേവ് ചെയ്തു!");
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Fetch School Details from Google Sheet (SchoolDetails Tab)
+    function loadSchoolDetails() {
+      fetch(SCRIPT_URL + "?action=getSchoolDetails")
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.length > 1) {
+            const row = data[1]; // First row after headers
+            document.getElementById('displaySchoolName').innerText = row[0] || 'School / Madrassa Name';
+            document.getElementById('displaySchoolSub').innerText = `${row[1] || ''} | Code: ${row[2] || ''} | ${row[4] || ''}`;
+          }
+        })
+        .catch(err => {
+          console.error("Error loading school details:", err);
+          document.getElementById('displaySchoolName').innerText = "സ്കൂൾ & മദ്രസ സ്മാർട്ട് രജിസ്റ്റർ";
+          document.getElementById('displaySchoolSub').innerText = "ഡിജിറ്റൽ സ്റ്റാഫ് & അറ്റൻഡൻസ് മാനേജ്‌മെന്റ് സിസ്റ്റം";
+        });
+    }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -273,12 +344,11 @@
       setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
     }
 
-    // Load Teachers from Google Sheet
     function loadTeachers() {
       fetch(SCRIPT_URL + "?action=getTeachers")
         .then(res => res.json())
         .then(data => {
-          teachersData = data.slice(1); // Remove header row
+          teachersData = data.slice(1);
           populateTeacherDropdowns();
           renderTeacherTable();
         })
@@ -317,7 +387,6 @@
       });
     }
 
-    // Form Submissions
     function handleTeacherSubmit(e) {
       e.preventDefault();
       showAlert("ഡാറ്റ സേവ് ചെയ്യുന്നു...", false);
@@ -339,7 +408,7 @@
       })
       .then(res => res.text())
       .then(res => {
-        showAlert("ടീച്ചർ ഡാറ്റ വിജയികരമായി സേവ് ചെയ്തു!");
+        showAlert("ടീച്ചർ ഡാറ്റ വിജയകരമായി സേവ് ചെയ്തു!");
         document.getElementById('teacherForm').reset();
         loadTeachers();
       });
@@ -383,7 +452,7 @@
 
     function handleSalarySubmit(e) {
       e.preventDefault();
-      showAlert("സാലറി വിവിരങ്ങൾ സേവ് ചെയ്യുന്നു...", false);
+      showAlert("സാലറി വിവരങ്ങൾ സേവ് ചെയ്യുന്നു...", false);
 
       const select = document.getElementById('salTeacherSelect');
       const teacherName = select.options[select.selectedIndex].getAttribute('data-name');
@@ -410,7 +479,7 @@
     }
 
     function scanFingerprint() {
-      alert("Mantra/SecuGen RD Service ഡ്രൈവർ പ്രാദേശിക കമ്പ്യൂട്ടറിൽ കണക്റ്റ് ചെയ്യുമ്പോൾ ഓട്ടോമാറ്റിക് പഞ്ചിംഗ് നടക്കും.");
+      alert("Mantra/SecuGen RD Service ഡ്രൈവർ കണക്റ്റ് ചെയ്താൽ ഫിംഗർപ്രിന്റ് റെക്കോർഡ് സിസ്റ്റത്തിൽ ലോഗിൻ ആകും.");
     }
   </script>
 </body>
