@@ -3,80 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Register - Attendance & Payroll Management</title>
+  <title>Smart Register</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    * { box-sizing: border-box; font-family: sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
     
-    header { background: #1e3c72; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: center; gap: 15px; }
-    .logo-container { position: relative; width: 65px; height: 65px; cursor: pointer; }
-    .logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid #fff; background: #fff; }
-    .logo-input { display: none; }
-    .logo-badge { position: absolute; bottom: 0; right: 0; background: #ffc107; color: #000; font-size: 10px; font-weight: bold; padding: 2px 4px; border-radius: 3px; }
+    header { background: #1e3c72; color: white; padding: 15px; text-align: center; }
+    header h1 { margin: 0; font-size: 20px; }
 
-    .header-text h1 { margin: 0; font-size: 22px; }
-    .header-text p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
-
-    nav { background: #2a5298; display: flex; justify-content: center; gap: 8px; padding: 10px; flex-wrap: wrap; }
-    nav button { background: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; font-size: 13px; }
+    nav { background: #2a5298; display: flex; justify-content: center; gap: 5px; padding: 8px; flex-wrap: wrap; }
+    nav button { background: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; font-size: 13px; }
     nav button:hover, nav button.active-tab { background: #ffc107; color: #000; }
 
-    .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
-    .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .card h2 { margin-top: 0; color: #1e3c72; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; font-size: 18px; }
+    .container { max-width: 1000px; margin: 15px auto; padding: 0 10px; }
+    .card { background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+    .card h2 { margin-top: 0; color: #1e3c72; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 16px; }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
     .form-group { display: flex; flex-direction: column; }
-    .form-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; }
-    .form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    .form-group label { font-size: 12px; font-weight: bold; margin-bottom: 4px; }
+    .form-group input, .form-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
     
-    .btn-submit { background: #28a745; color: white; border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; }
-    .btn-submit:hover { background: #218838; }
+    .btn-submit { background: #28a745; color: white; border: none; padding: 10px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-    table th, table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    table th, table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     table th { background-color: #1e3c72; color: white; }
     table tr:nth-child(even) { background-color: #f9f9f9; }
 
-    .status-msg { padding: 10px; margin-top: 10px; border-radius: 4px; display: none; font-weight: bold; text-align: center; }
-    .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .status-loading { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+    .status-msg { padding: 8px; margin-bottom: 10px; border-radius: 4px; display: none; font-weight: bold; text-align: center; font-size: 13px; }
+    .status-success { background: #d4edda; color: #155724; }
+    .status-loading { background: #cce5ff; color: #004085; }
 
-    .finger-box { border: 2px dashed #007bff; background: #eef6ff; text-align: center; padding: 15px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-    .finger-icon { font-size: 40px; color: #007bff; }
-
-    .payslip-box { border: 2px dashed #1e3c72; padding: 20px; border-radius: 8px; background: #fafafa; margin-top: 20px; }
-    .payslip-header { text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; }
-    @media print {
-      body * { visibility: hidden; }
-      #printablePayslip, #printablePayslip * { visibility: visible; }
-      #printablePayslip { position: absolute; left: 0; top: 0; width: 100%; }
-    }
+    .payslip-box { border: 2px dashed #1e3c72; padding: 15px; border-radius: 6px; background: #fff; margin-top: 15px; }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo-container" onclick="document.getElementById('logoInput').click()" title="Click to Change Logo">
-      <img id="schoolLogo" class="logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='65' height='65' viewBox='0 0 24 24' fill='none' stroke='%231e3c72' stroke-width='2'><path d='M12 3L1 9l11 6 9-4.91V17h2V9L12 3z'/><path d='M4 10v6c0 3 8 3 8 3s8 0 8-3v-6'/></svg>" alt="Logo">
-      <span class="logo-badge">EDIT</span>
-      <input type="file" id="logoInput" class="logo-input" accept="image/*" onchange="uploadLogo(event)">
-    </div>
-    <div class="header-text">
-      <h1 id="displaySchoolName">Loading Institution Name...</h1>
-      <p id="displaySchoolSub">Address & Details...</p>
-    </div>
+    <h1 id="displaySchoolName">Smart Register</h1>
+    <p style="margin:3px 0 0; font-size:12px;">Staff & Attendance Management System</p>
   </header>
 
   <nav>
     <button id="tab-btn-teachers" class="active-tab" onclick="switchTab('teachers')">1. Teacher Registration</button>
-    <button id="tab-btn-attendance" onclick="switchTab('attendance')">2. Attendance Puncher</button>
+    <button id="tab-btn-attendance" onclick="switchTab('attendance')">2. Attendance</button>
     <button id="tab-btn-salary" onclick="switchTab('salary')">3. Salary Master</button>
     <button id="tab-btn-payments" onclick="switchTab('payments')">4. Salary Payments</button>
-    <button id="tab-btn-reports" onclick="switchTab('reports')">5. Reports & Payslips</button>
+    <button id="tab-btn-reports" onclick="switchTab('reports')">5. Reports & Payslip</button>
   </nav>
 
   <div class="container">
@@ -90,28 +67,26 @@
           <div class="form-grid">
             <div class="form-group"><label>Admission No</label><input type="text" id="admNo" required placeholder="Eg: T-101"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="tName" required placeholder="Full Name"></div>
-            <div class="form-group"><label>Aadhaar Number</label><input type="text" id="aadhaar" required maxlength="12" placeholder="12 Digit Number"></div>
+            <div class="form-group"><label>Aadhaar Number</label><input type="text" id="aadhaar" required placeholder="12 Digit Number"></div>
             <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required placeholder="Mobile Number"></div>
-            <div class="form-group"><label>Address</label><input type="text" id="address" required placeholder="Location / Address"></div>
+            <div class="form-group"><label>Address</label><input type="text" id="address" required placeholder="Address"></div>
             <div class="form-group"><label>Designation</label>
               <select id="designation">
-                <option value="Headmaster / Principal">Headmaster / Principal</option>
+                <option value="Headmaster">Headmaster</option>
                 <option value="Teacher">Teacher</option>
                 <option value="Staff">Staff</option>
               </select>
             </div>
             <div class="form-group"><label>Joining Date</label><input type="date" id="joiningDate" required></div>
           </div>
-          <button type="submit" class="btn-submit">Save Teacher Record</button>
+          <button type="submit" class="btn-submit">Save Teacher</button>
         </form>
       </div>
       <div class="card">
-        <h2>Registered Teachers Directory</h2>
+        <h2>Registered Teachers List</h2>
         <table id="teacherTable">
-          <thead>
-            <tr><th>Adm No</th><th>Name</th><th>Designation</th><th>Address</th><th>Aadhaar Number</th></tr>
-          </thead>
-          <tbody><tr><td colspan="5" style="text-align:center;">Loading data...</td></tr></tbody>
+          <thead><tr><th>Adm No</th><th>Name</th><th>Designation</th><th>Phone</th><th>Aadhaar</th></tr></thead>
+          <tbody><tr><td colspan="5" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -119,16 +94,11 @@
     <!-- TAB 2: Attendance -->
     <div id="attendance" class="tab-content">
       <div class="card">
-        <h2>Mark Daily Attendance</h2>
-        <div class="finger-box" onclick="scanFingerprint()">
-          <div class="finger-icon">☝️</div>
-          <strong>Click to Scan Fingerprint / Touch Sensor</strong>
-          <p style="margin: 5px 0 0; font-size: 12px; color: #555;">(Auto-fills Time In / Time Out)</p>
-        </div>
-        <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)" style="margin-top: 15px;">
+        <h2>Mark Attendance</h2>
+        <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)">
           <div class="form-grid">
             <div class="form-group"><label>Date</label><input type="date" id="attDate" required></div>
-            <div class="form-group"><label>Select Teacher</label><select id="attTeacherSelect" required><option value="">Select Teacher...</option></select></div>
+            <div class="form-group"><label>Select Teacher</label><select id="attTeacherSelect" required><option value="">Select...</option></select></div>
             <div class="form-group"><label>Time In</label><input type="time" id="timeIn" required></div>
             <div class="form-group"><label>Time Out</label><input type="time" id="timeOut"></div>
             <div class="form-group"><label>Status</label>
@@ -146,10 +116,8 @@
       <div class="card">
         <h2>Daily Attendance History</h2>
         <table id="attendanceTable">
-          <thead>
-            <tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Status</th></tr>
-          </thead>
-          <tbody><tr><td colspan="6" style="text-align:center;">Loading attendance history...</td></tr></tbody>
+          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
+          <tbody><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -162,25 +130,15 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Select Teacher</label>
-              <select id="salTeacherSelect" required onchange="fetchSalaryMasterForTeacher()"><option value="">Select Teacher...</option></select>
+              <select id="salTeacherSelect" required onchange="autoFillSalaryStructure()"><option value="">Select...</option></select>
             </div>
             <div class="form-group"><label>Basic Salary (₹)</label><input type="number" id="basicSal" required oninput="calcNetSalary()"></div>
             <div class="form-group"><label>Allowances (₹)</label><input type="number" id="allowanceSal" value="0" oninput="calcNetSalary()"></div>
             <div class="form-group"><label>Deductions (₹)</label><input type="number" id="deductionSal" value="0" oninput="calcNetSalary()"></div>
-            <div class="form-group"><label>Net Salary (₹)</label><input type="number" id="netSal" readonly style="background: #e9ecef;"></div>
+            <div class="form-group"><label>Net Salary (₹)</label><input type="number" id="netSal" readonly style="background: #eee;"></div>
           </div>
-          <button type="submit" class="btn-submit">Save Salary Structure</button>
+          <button type="submit" class="btn-submit">Save Structure</button>
         </form>
-      </div>
-      
-      <div class="card">
-        <h2>Saved Salary Master Structure</h2>
-        <table id="salaryMasterTable">
-          <thead>
-            <tr><th>Adm No</th><th>Name</th><th>Basic (₹)</th><th>Allowances (₹)</th><th>Deductions (₹)</th><th>Net Salary (₹)</th></tr>
-          </thead>
-          <tbody><tr><td colspan="6" style="text-align:center;">Loading salary structures...</td></tr></tbody>
-        </table>
       </div>
     </div>
 
@@ -192,18 +150,11 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Select Teacher</label>
-              <select id="payTeacherSelect" required onchange="autoFillPayAmount()"><option value="">Select Teacher...</option></select>
+              <select id="payTeacherSelect" required onchange="autoFillPayAmount()"><option value="">Select...</option></select>
             </div>
-            <div class="form-group">
-              <label>Payment Month</label>
-              <input type="month" id="payMonth" required>
-            </div>
-            <div class="form-group">
-              <label>Paid Amount (₹)</label>
-              <input type="number" id="payAmount" required placeholder="₹ 0">
-            </div>
-            <div class="form-group">
-              <label>Payment Mode</label>
+            <div class="form-group"><label>Payment Month</label><input type="month" id="payMonth" required></div>
+            <div class="form-group"><label>Paid Amount (₹)</label><input type="number" id="payAmount" required placeholder="₹ 0"></div>
+            <div class="form-group"><label>Payment Mode</label>
               <select id="payMode">
                 <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option>
@@ -218,10 +169,8 @@
       <div class="card">
         <h2>Payment History</h2>
         <table id="paymentsTable">
-          <thead>
-            <tr><th>Date</th><th>Adm No</th><th>Name</th><th>Month</th><th>Amount</th><th>Mode</th><th>Status</th></tr>
-          </thead>
-          <tbody><tr><td colspan="7" style="text-align:center;">Loading payments...</td></tr></tbody>
+          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Month</th><th>Amount</th><th>Mode</th><th>Status</th></tr></thead>
+          <tbody><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -231,97 +180,40 @@
       <div class="card">
         <h2>Payslip Generator</h2>
         <div class="form-grid">
-          <div class="form-group">
-            <label>Select Teacher</label>
-            <select id="reportTeacherSelect"><option value="">Select Teacher...</option></select>
-          </div>
-          <div class="form-group">
-            <label>Select Month</label>
-            <input type="month" id="reportMonth">
-          </div>
+          <div class="form-group"><label>Select Teacher</label><select id="reportTeacherSelect"><option value="">Select...</option></select></div>
+          <div class="form-group"><label>Select Month</label><input type="month" id="reportMonth"></div>
         </div>
         <button class="btn-submit" style="background:#007bff;" onclick="generatePayslip()">Generate Payslip</button>
       </div>
 
       <div id="printablePayslip" class="payslip-box" style="display:none;">
-        <div class="payslip-header">
-          <h2 id="psSchoolName" style="margin:0;">-</h2>
-          <p id="psSchoolSub" style="margin:2px;">-</p>
-          <h4 style="margin:10px 0 0 0; color:#1e3c72;">SALARY PAYSLIP</h4>
-        </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:15px;">
-          <div>
-            <p><strong>Teacher:</strong> <span id="psName">-</span></p>
-            <p><strong>Adm No:</strong> <span id="psAdmNo">-</span></p>
-          </div>
-          <div>
-            <p><strong>Month:</strong> <span id="psMonth">-</span></p>
-            <p><strong>Issued Date:</strong> <span id="psDate">-</span></p>
-          </div>
-        </div>
+        <h3 style="text-align:center; margin:0; color:#1e3c72;">SALARY PAYSLIP</h3>
+        <hr style="margin:10px 0;">
+        <p><strong>Teacher:</strong> <span id="psName">-</span> (<span id="psAdmNo">-</span>)</p>
+        <p><strong>Month:</strong> <span id="psMonth">-</span></p>
         <table>
           <tr><th>Description</th><th>Amount (₹)</th></tr>
           <tr><td>Paid Salary Amount</td><td id="psAmount">0</td></tr>
-          <tr><td>Status</td><td id="psStatus" style="color:green; font-weight:bold;">PAID</td></tr>
+          <tr><td>Status</td><td style="color:green; font-weight:bold;">PAID</td></tr>
         </table>
-        <div style="margin-top:30px; display:flex; justify-content:space-between; font-size:12px;">
-          <p>Date: ....................</p>
-          <p>Authorized Signature: ....................</p>
-        </div>
-        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:15px;">🖨️ Print / Save as PDF</button>
+        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:10px;">Print Payslip</button>
       </div>
     </div>
 
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwAizP15oIjWDwJuUdfh6yNA9k9v4dbU7MeZf1WleUoWxrHfsNfpkircQ69DwUMS_jPA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVQRLB89xDcDqrFZB69MgNbDT4J9xMe6Mz7VuWKzPUmfXYwm92-jZChqdHFoEbpU6wDA/exec";
     let teachersData = [];
     let salaryMasterData = [];
 
     window.onload = function() {
       document.getElementById('attDate').valueAsDate = new Date();
-      loadSavedLogo();
-      loadSchoolDetails();
       loadTeachers();
       loadSalaryMaster();
       loadPayments();
       loadAttendanceHistory();
     };
-
-    function loadSavedLogo() {
-      const savedLogo = localStorage.getItem('school_app_logo');
-      if (savedLogo) document.getElementById('schoolLogo').src = savedLogo;
-    }
-
-    function uploadLogo(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('schoolLogo').src = e.target.result;
-          localStorage.setItem('school_app_logo', e.target.result);
-          showAlert("Logo updated successfully!");
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function loadSchoolDetails() {
-      fetch(SCRIPT_URL + "?action=getSchoolDetails")
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data) && data.length > 1) {
-            const row = data[1];
-            if(row[0]) document.getElementById('displaySchoolName').innerText = row[0];
-            if(row[1]) document.getElementById('displaySchoolSub').innerText = `${row[1]} | Code: ${row[2] || ''}`;
-          } else {
-            document.getElementById('displaySchoolName').innerText = "Smart Register";
-            document.getElementById('displaySchoolSub').innerText = "Staff & Attendance Management System";
-          }
-        })
-        .catch(err => console.error("Error loading details", err));
-    }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -335,7 +227,20 @@
       alertBox.style.display = 'block';
       alertBox.className = 'status-msg ' + (isSuccess ? 'status-success' : 'status-loading');
       alertBox.innerText = msg;
-      setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+      setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+    }
+
+    function cleanFormat(val) {
+      if(!val) return "";
+      let s = String(val);
+      if(s.includes("T")) {
+        let parts = s.split("T");
+        if(parts[1] && parts[1].includes(":")) {
+          return parts[1].substring(0, 5); // Time Only
+        }
+        return parts[0]; // Date Only
+      }
+      return s;
     }
 
     function loadTeachers() {
@@ -346,8 +251,6 @@
             teachersData = data.slice(1);
             populateTeacherDropdowns();
             renderTeacherTable();
-          } else {
-            document.querySelector('#teacherTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;">No teacher records found.</td></tr>';
           }
         });
     }
@@ -359,10 +262,9 @@
         document.getElementById('payTeacherSelect'),
         document.getElementById('reportTeacherSelect')
       ];
-
       selects.forEach(select => {
         if(!select) return;
-        select.innerHTML = '<option value="">Select Teacher...</option>';
+        select.innerHTML = '<option value="">Select...</option>';
         teachersData.forEach(row => {
           select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}">${row[0]} - ${row[1]}</option>`;
         });
@@ -373,13 +275,13 @@
       const tbody = document.querySelector('#teacherTable tbody');
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[4]}</td><td>${row[2]}</td></tr>`;
+        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[3]}</td><td>${row[2]}</td></tr>`;
       });
     }
 
     function handleTeacherSubmit(e) {
       e.preventDefault();
-      showAlert("Saving teacher record...", false);
+      showAlert("Saving...", false);
       const payload = {
         action: "saveTeacher",
         admNo: document.getElementById('admNo').value,
@@ -391,28 +293,12 @@
         joiningDate: document.getElementById('joiningDate').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { 
-          showAlert("Teacher registered successfully!"); 
-          document.getElementById('teacherForm').reset(); 
-          loadTeachers(); 
-        });
-    }
-
-    function scanFingerprint() {
-      const now = new Date();
-      const currentTime = now.toTimeString().substring(0,5);
-      if(!document.getElementById('timeIn').value) {
-        document.getElementById('timeIn').value = currentTime;
-        showAlert("Fingerprint Verified: Time In Recorded (" + currentTime + ")");
-      } else {
-        document.getElementById('timeOut').value = currentTime;
-        showAlert("Fingerprint Verified: Time Out Recorded (" + currentTime + ")");
-      }
+        .then(() => { showAlert("Teacher Saved!"); document.getElementById('teacherForm').reset(); loadTeachers(); });
     }
 
     function handleAttendanceSubmit(e) {
       e.preventDefault();
-      showAlert("Marking attendance...", false);
+      showAlert("Marking...", false);
       const sel = document.getElementById('attTeacherSelect');
       const payload = {
         action: "markAttendance",
@@ -421,15 +307,10 @@
         name: sel.options[sel.selectedIndex].getAttribute('data-name'),
         timeIn: document.getElementById('timeIn').value,
         timeOut: document.getElementById('timeOut').value,
-        status: document.getElementById('attStatus').value,
-        entryMode: "Fingerprint/Manual"
+        status: document.getElementById('attStatus').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { 
-          showAlert("Attendance marked successfully!"); 
-          document.getElementById('attendanceForm').reset(); 
-          loadAttendanceHistory(); 
-        });
+        .then(() => { showAlert("Attendance Marked!"); loadAttendanceHistory(); });
     }
 
     function loadAttendanceHistory() {
@@ -440,10 +321,10 @@
           tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
             data.slice(1).reverse().forEach(row => {
-              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td></tr>`;
+              tbody.innerHTML += `<tr><td>${cleanFormat(row[0])}</td><td>${row[1]}</td><td>${row[2]}</td><td>${cleanFormat(row[3])}</td><td>${cleanFormat(row[4])}</td><td>${row[5]}</td></tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No attendance records found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No records.</td></tr>';
           }
         });
     }
@@ -455,45 +336,17 @@
       document.getElementById('netSal').value = b + a - d;
     }
 
-    function handleSalarySubmit(e) {
-      e.preventDefault();
-      showAlert("Saving salary structure...", false);
-      const sel = document.getElementById('salTeacherSelect');
-      const payload = {
-        action: "saveSalary",
-        admNo: sel.value,
-        name: sel.options[sel.selectedIndex].getAttribute('data-name'),
-        basic: document.getElementById('basicSal').value,
-        allowance: document.getElementById('allowanceSal').value,
-        deduction: document.getElementById('deductionSal').value,
-        netSalary: document.getElementById('netSal').value
-      };
-      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { 
-          showAlert("Salary structure saved!"); 
-          document.getElementById('salaryForm').reset(); 
-          loadSalaryMaster();
-        });
-    }
-
     function loadSalaryMaster() {
       fetch(SCRIPT_URL + "?action=getSalaryMaster")
         .then(res => res.json())
         .then(data => {
-          const tbody = document.querySelector('#salaryMasterTable tbody');
-          tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
             salaryMasterData = data.slice(1);
-            salaryMasterData.forEach(row => {
-              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>₹${row[2]}</td><td>₹${row[3]}</td><td>₹${row[4]}</td><td><strong>₹${row[5]}</strong></td></tr>`;
-            });
-          } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No saved salary structures.</td></tr>';
           }
         });
     }
 
-    function fetchSalaryMasterForTeacher() {
+    function autoFillSalaryStructure() {
       const admNo = document.getElementById('salTeacherSelect').value;
       const match = salaryMasterData.find(r => r[0] == admNo);
       if (match) {
@@ -517,9 +370,26 @@
       }
     }
 
+    function handleSalarySubmit(e) {
+      e.preventDefault();
+      showAlert("Saving Salary...", false);
+      const sel = document.getElementById('salTeacherSelect');
+      const payload = {
+        action: "saveSalary",
+        admNo: sel.value,
+        name: sel.options[sel.selectedIndex].getAttribute('data-name'),
+        basic: document.getElementById('basicSal').value,
+        allowance: document.getElementById('allowanceSal').value,
+        deduction: document.getElementById('deductionSal').value,
+        netSalary: document.getElementById('netSal').value
+      };
+      fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(() => { showAlert("Salary Structure Saved!"); loadSalaryMaster(); });
+    }
+
     function handlePaymentSubmit(e) {
       e.preventDefault();
-      showAlert("Recording payment...", false);
+      showAlert("Saving Payment...", false);
       const sel = document.getElementById('payTeacherSelect');
       const payload = {
         action: "savePayment",
@@ -531,19 +401,7 @@
         status: "Paid"
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { 
-          showAlert("Payment recorded successfully!"); 
-          document.getElementById('paymentForm').reset(); 
-          loadPayments(); 
-        });
-    }
-
-    function parseMonthYear(monthStr) {
-      if(!monthStr) return "";
-      if(monthStr.includes("T")) {
-        return monthStr.substring(0, 7);
-      }
-      return monthStr;
+        .then(() => { showAlert("Payment Saved!"); loadPayments(); });
     }
 
     function loadPayments() {
@@ -554,11 +412,10 @@
           tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
             data.slice(1).reverse().forEach(row => {
-              let cleanMonth = parseMonthYear(String(row[3]));
-              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${cleanMonth}</td><td>₹${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
+              tbody.innerHTML += `<tr><td>${cleanFormat(row[0])}</td><td>${row[1]}</td><td>${row[2]}</td><td>${cleanFormat(row[3])}</td><td>₹${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment records found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payments found.</td></tr>';
           }
         });
     }
@@ -566,21 +423,18 @@
     function generatePayslip() {
       const sel = document.getElementById('reportTeacherSelect');
       const month = document.getElementById('reportMonth').value;
-      if(!sel.value || !month) { alert("Please select both teacher and month."); return; }
+      if(!sel.value || !month) { alert("Select Teacher and Month"); return; }
 
-      document.getElementById('psSchoolName').innerText = document.getElementById('displaySchoolName').innerText;
-      document.getElementById('psSchoolSub').innerText = document.getElementById('displaySchoolSub').innerText;
       document.getElementById('psName').innerText = sel.options[sel.selectedIndex].getAttribute('data-name');
       document.getElementById('psAdmNo').innerText = sel.value;
       document.getElementById('psMonth').innerText = month;
-      document.getElementById('psDate').innerText = new Date().toLocaleDateString();
 
       fetch(SCRIPT_URL + "?action=getPayments")
         .then(res => res.json())
         .then(data => {
           let paidAmount = "0";
           if (Array.isArray(data) && data.length > 1) {
-            const match = data.find(r => r[1] == sel.value && parseMonthYear(String(r[3])) === month);
+            const match = data.find(r => r[1] == sel.value && cleanFormat(r[3]) === month);
             if(match) paidAmount = match[4];
           }
           document.getElementById('psAmount').innerText = "₹ " + paidAmount;
