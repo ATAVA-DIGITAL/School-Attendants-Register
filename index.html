@@ -8,23 +8,17 @@
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
 
-    /* Welcome Animation Overlay */
     #welcomeOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: #1e3c72; color: white; display: flex; flex-direction: column;
       justify-content: center; align-items: center; z-index: 9999;
-      animation: fadeOut 1s ease-in-out 2.5s forwards;
+      animation: fadeOut 1s ease-in-out 2s forwards;
     }
-    #welcomeOverlay h1 { font-size: 36px; margin-bottom: 10px; animation: zoomIn 1s ease-in-out; }
-    #welcomeOverlay p { font-size: 18px; opacity: 0.8; }
+    #welcomeOverlay h1 { font-size: 34px; margin-bottom: 8px; animation: zoomIn 1s ease-in-out; }
+    #welcomeOverlay p { font-size: 16px; opacity: 0.8; }
 
-    @keyframes zoomIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
+    @keyframes zoomIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
     header { background: #1e3c72; color: white; padding: 15px; text-align: center; }
     header h1 { margin: 0; font-size: 22px; }
@@ -35,7 +29,7 @@
 
     .container { max-width: 1000px; margin: 15px auto; padding: 0 10px; }
     .card { background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
-    .card h2 { margin-top: 0; color: #1e3c72; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 16px; }
+    .card h2 { margin-top: 0; color: #1e3c72; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
 
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
     .form-group { display: flex; flex-direction: column; }
@@ -43,6 +37,7 @@
     .form-group input, .form-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
 
     .btn-submit { background: #28a745; color: white; border: none; padding: 10px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; }
+    .btn-danger { background: #dc3545; color: white; border: none; padding: 5px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
@@ -56,10 +51,8 @@
     .status-success { background: #d4edda; color: #155724; }
     .status-loading { background: #cce5ff; color: #004085; }
 
-    /* Clean Payslip Design for Screen & Print */
     .payslip-box { border: 2px dashed #1e3c72; padding: 20px; border-radius: 6px; background: #fff; margin-top: 15px; }
 
-    /* Print Only CSS */
     @media print {
       body * { visibility: hidden; }
       #printablePayslip, #printablePayslip * { visibility: visible; }
@@ -70,7 +63,6 @@
 </head>
 <body>
 
-  <!-- Welcome Screen Animation -->
   <div id="welcomeOverlay">
     <h1>Smart Register System</h1>
     <p>Staff & Attendance Management System</p>
@@ -148,7 +140,10 @@
         </form>
       </div>
       <div class="card">
-        <h2>Daily Attendance History</h2>
+        <h2>
+          <span>Daily Attendance History</span>
+          <button onclick="clearAttendanceHistory()" class="btn-danger">Clear History</button>
+        </h2>
         <table id="attendanceTable">
           <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Work Hours</th><th>Status</th></tr></thead>
           <tbody><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
@@ -231,7 +226,7 @@
         <h3 style="margin:10px 0 0; color:#333; text-decoration: underline;">SALARY PAYSLIP</h3>
       </div>
       
-      <div style="display:flex; justify-between: space-between; margin-bottom:15px; font-size:14px;">
+      <div style="display:flex; justify-content: space-between; margin-bottom:15px; font-size:14px;">
         <div>
           <p><strong>Teacher Name:</strong> <span id="psName">-</span></p>
           <p><strong>Admission No:</strong> <span id="psAdmNo">-</span></p>
@@ -265,7 +260,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzR1FHlbn2dWHO-rhCpsj3HAJ7WAdeKbncotoBkVNizaCHf5HftL29-sX-wwFngGCT5Jw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEv5VssDBOEq-IzWnzdx-xrSP6wSvF6B1kxLSfG3vK5GCmDk3nqQIb8PwEa5C8vnMkYQ/exec";
     let teachersData = [];
     let salaryMasterData = [];
 
@@ -338,7 +333,7 @@
         if(!select) return;
         select.innerHTML = '<option value="">Select...</option>';
         teachersData.forEach(row => {
-          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}" data-basic="${row[7] || 0}">${row[0]} - ${row[1]}</option>`;
+          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}" data-basic="${row[2] || 0}">${row[0]} - ${row[1]}</option>`;
         });
       });
     }
@@ -347,7 +342,7 @@
       const tbody = document.querySelector('#teacherTable tbody');
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>₹ ${row[7] || 0}</td><td>${row[3]}</td></tr>`;
+        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5] || 'Teacher'}</td><td>₹ ${row[2] || 0}</td><td>${row[3] || '-'}</td></tr>`;
       });
     }
 
@@ -404,6 +399,14 @@
             tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No attendance records found.</td></tr>';
           }
         });
+    }
+
+    function clearAttendanceHistory() {
+      if(confirm("Daily Attendance History മുഴുവനായി മായ്ക്കണോ?")) {
+        showAlert("Clearing Attendance...", false);
+        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "clearAttendance" }) })
+          .then(() => { showAlert("Attendance History Cleared!"); loadAttendanceHistory(); });
+      }
     }
 
     function calcNetSalary() {
