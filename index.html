@@ -3,16 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Register</title>
+  <title>Smart Register - Staff Management System</title>
   <style>
-    * { box-sizing: border-box; font-family: sans-serif; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; }
-    
+
+    /* Welcome Animation Overlay */
+    #welcomeOverlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #1e3c72; color: white; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; z-index: 9999;
+      animation: fadeOut 1s ease-in-out 2.5s forwards;
+    }
+    #welcomeOverlay h1 { font-size: 36px; margin-bottom: 10px; animation: zoomIn 1s ease-in-out; }
+    #welcomeOverlay p { font-size: 18px; opacity: 0.8; }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
     header { background: #1e3c72; color: white; padding: 15px; text-align: center; }
-    header h1 { margin: 0; font-size: 20px; }
+    header h1 { margin: 0; font-size: 22px; }
 
     nav { background: #2a5298; display: flex; justify-content: center; gap: 5px; padding: 8px; flex-wrap: wrap; }
-    nav button { background: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; font-size: 13px; }
+    nav button { background: white; border: none; padding: 8px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; color: #1e3c72; font-size: 13px; }
     nav button:hover, nav button.active-tab { background: #ffc107; color: #000; }
 
     .container { max-width: 1000px; margin: 15px auto; padding: 0 10px; }
@@ -23,7 +41,7 @@
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-size: 12px; font-weight: bold; margin-bottom: 4px; }
     .form-group input, .form-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
-    
+
     .btn-submit { background: #28a745; color: white; border: none; padding: 10px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; }
 
     .tab-content { display: none; }
@@ -38,17 +56,32 @@
     .status-success { background: #d4edda; color: #155724; }
     .status-loading { background: #cce5ff; color: #004085; }
 
-    .payslip-box { border: 2px dashed #1e3c72; padding: 15px; border-radius: 6px; background: #fff; margin-top: 15px; }
+    /* Clean Payslip Design for Screen & Print */
+    .payslip-box { border: 2px dashed #1e3c72; padding: 20px; border-radius: 6px; background: #fff; margin-top: 15px; }
+
+    /* Print Only CSS */
+    @media print {
+      body * { visibility: hidden; }
+      #printablePayslip, #printablePayslip * { visibility: visible; }
+      #printablePayslip { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+      .no-print { display: none !important; }
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1 id="displaySchoolName">Smart Register</h1>
+  <!-- Welcome Screen Animation -->
+  <div id="welcomeOverlay">
+    <h1>Smart Register System</h1>
+    <p>Staff & Attendance Management System</p>
+  </div>
+
+  <header class="no-print">
+    <h1>Smart Register System</h1>
     <p style="margin:3px 0 0; font-size:12px;">Staff & Attendance Management System</p>
   </header>
 
-  <nav>
+  <nav class="no-print">
     <button id="tab-btn-teachers" class="active-tab" onclick="switchTab('teachers')">1. Teacher Registration</button>
     <button id="tab-btn-attendance" onclick="switchTab('attendance')">2. Attendance</button>
     <button id="tab-btn-salary" onclick="switchTab('salary')">3. Salary Master</button>
@@ -56,7 +89,7 @@
     <button id="tab-btn-reports" onclick="switchTab('reports')">5. Reports & Payslip</button>
   </nav>
 
-  <div class="container">
+  <div class="container no-print">
     <div id="statusAlert" class="status-msg"></div>
 
     <!-- TAB 1: Teachers -->
@@ -67,6 +100,7 @@
           <div class="form-grid">
             <div class="form-group"><label>Admission No</label><input type="text" id="admNo" required placeholder="Eg: T-101"></div>
             <div class="form-group"><label>Full Name</label><input type="text" id="tName" required placeholder="Full Name"></div>
+            <div class="form-group"><label>Basic Salary (₹)</label><input type="number" id="tBasicSalary" required placeholder="Basic Monthly Salary"></div>
             <div class="form-group"><label>Aadhaar Number</label><input type="text" id="aadhaar" required placeholder="12 Digit Number"></div>
             <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required placeholder="Mobile Number"></div>
             <div class="form-group"><label>Address</label><input type="text" id="address" required placeholder="Address"></div>
@@ -85,7 +119,7 @@
       <div class="card">
         <h2>Registered Teachers List</h2>
         <table id="teacherTable">
-          <thead><tr><th>Adm No</th><th>Name</th><th>Designation</th><th>Phone</th><th>Aadhaar</th></tr></thead>
+          <thead><tr><th>Adm No</th><th>Name</th><th>Designation</th><th>Basic Salary</th><th>Phone</th></tr></thead>
           <tbody><tr><td colspan="5" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
@@ -100,7 +134,7 @@
             <div class="form-group"><label>Date</label><input type="date" id="attDate" required></div>
             <div class="form-group"><label>Select Teacher</label><select id="attTeacherSelect" required><option value="">Select...</option></select></div>
             <div class="form-group"><label>Time In</label><input type="time" id="timeIn" required></div>
-            <div class="form-group"><label>Time Out</label><input type="time" id="timeOut"></div>
+            <div class="form-group"><label>Time Out</label><input type="time" id="timeOut" required></div>
             <div class="form-group"><label>Status</label>
               <select id="attStatus">
                 <option value="Present">Present</option>
@@ -116,8 +150,8 @@
       <div class="card">
         <h2>Daily Attendance History</h2>
         <table id="attendanceTable">
-          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Status</th></tr></thead>
-          <tbody><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Work Hours</th><th>Status</th></tr></thead>
+          <tbody><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -137,7 +171,7 @@
             <div class="form-group"><label>Deductions (₹)</label><input type="number" id="deductionSal" value="0" oninput="calcNetSalary()"></div>
             <div class="form-group"><label>Net Salary (₹)</label><input type="number" id="netSal" readonly style="background: #eee;"></div>
           </div>
-          <button type="submit" class="btn-submit">Save Structure</button>
+          <button type="submit" class="btn-submit">Update Structure</button>
         </form>
       </div>
     </div>
@@ -167,7 +201,7 @@
       </div>
 
       <div class="card">
-        <h2>Payment History</h2>
+        <h2>Payment History (Month-wise)</h2>
         <table id="paymentsTable">
           <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Month</th><th>Amount</th><th>Mode</th><th>Status</th></tr></thead>
           <tbody><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
@@ -185,25 +219,53 @@
         </div>
         <button class="btn-submit" style="background:#007bff;" onclick="generatePayslip()">Generate Payslip</button>
       </div>
-
-      <div id="printablePayslip" class="payslip-box" style="display:none;">
-        <h3 style="text-align:center; margin:0; color:#1e3c72;">SALARY PAYSLIP</h3>
-        <hr style="margin:10px 0;">
-        <p><strong>Teacher:</strong> <span id="psName">-</span> (<span id="psAdmNo">-</span>)</p>
-        <p><strong>Month:</strong> <span id="psMonth">-</span></p>
-        <table>
-          <tr><th>Description</th><th>Amount (₹)</th></tr>
-          <tr><td>Paid Salary Amount</td><td id="psAmount">0</td></tr>
-          <tr><td>Status</td><td style="color:green; font-weight:bold;">PAID</td></tr>
-        </table>
-        <button onclick="window.print()" class="btn-submit" style="background:#28a745; margin-top:10px;">Print Payslip</button>
-      </div>
     </div>
+  </div>
 
+  <!-- Printable Payslip Area -->
+  <div class="container">
+    <div id="printablePayslip" class="payslip-box" style="display:none;">
+      <div style="text-align:center; border-bottom: 2px solid #1e3c72; padding-bottom: 10px; margin-bottom: 15px;">
+        <h2 style="margin:0; color:#1e3c72;">SMART REGISTER SYSTEM</h2>
+        <p style="margin:3px 0 0; font-size:13px; color:#555;">Staff & Attendance Management System</p>
+        <h3 style="margin:10px 0 0; color:#333; text-decoration: underline;">SALARY PAYSLIP</h3>
+      </div>
+      
+      <div style="display:flex; justify-between: space-between; margin-bottom:15px; font-size:14px;">
+        <div>
+          <p><strong>Teacher Name:</strong> <span id="psName">-</span></p>
+          <p><strong>Admission No:</strong> <span id="psAdmNo">-</span></p>
+        </div>
+        <div>
+          <p><strong>Payment Month:</strong> <span id="psMonth">-</span></p>
+          <p><strong>Printed Date:</strong> <span id="psDate">-</span></p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Description</th><th>Amount (₹)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Basic Salary</td><td id="psBasic">₹ 0</td></tr>
+          <tr><td>Allowances</td><td id="psAllowance">₹ 0</td></tr>
+          <tr><td>Deductions</td><td id="psDeduction">₹ 0</td></tr>
+          <tr style="font-weight:bold; background-color:#eef2f7;"><td>Net Paid Amount</td><td id="psAmount">₹ 0</td></tr>
+          <tr><td>Status</td><td style="color:green; font-weight:bold;">PAID</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; font-size: 13px;">
+        <div><p>____________________<br>Staff Signature</p></div>
+        <div><p>____________________<br>Authorized Signature</p></div>
+      </div>
+
+      <button onclick="window.print()" class="btn-submit no-print" style="background:#28a745; margin-top:15px;">Print Payslip</button>
+    </div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVQRLB89xDcDqrFZB69MgNbDT4J9xMe6Mz7VuWKzPUmfXYwm92-jZChqdHFoEbpU6wDA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzR1FHlbn2dWHO-rhCpsj3HAJ7WAdeKbncotoBkVNizaCHf5HftL29-sX-wwFngGCT5Jw/exec";
     let teachersData = [];
     let salaryMasterData = [];
 
@@ -230,17 +292,27 @@
       setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
     }
 
-    function cleanFormat(val) {
-      if(!val) return "";
-      let s = String(val);
-      if(s.includes("T")) {
-        let parts = s.split("T");
-        if(parts[1] && parts[1].includes(":")) {
-          return parts[1].substring(0, 5); // Time Only
-        }
-        return parts[0]; // Date Only
-      }
-      return s;
+    function format12HourTime(timeStr) {
+      if(!timeStr) return "";
+      let parts = timeStr.split(":");
+      if(parts.length < 2) return timeStr;
+      let hours = parseInt(parts[0]);
+      let minutes = parts[1];
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return hours + ":" + minutes + " " + ampm;
+    }
+
+    function calculateDuration(tIn, tOut) {
+      if(!tIn || !tOut) return "-";
+      let start = new Date("01/01/2000 " + tIn);
+      let end = new Date("01/01/2000 " + tOut);
+      let diff = (end - start) / 1000 / 60;
+      if (diff < 0) diff += 24 * 60;
+      let hrs = Math.floor(diff / 60);
+      let mins = diff % 60;
+      return `${hrs} hrs ${mins} mins`;
     }
 
     function loadTeachers() {
@@ -266,7 +338,7 @@
         if(!select) return;
         select.innerHTML = '<option value="">Select...</option>';
         teachersData.forEach(row => {
-          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}">${row[0]} - ${row[1]}</option>`;
+          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}" data-basic="${row[7] || 0}">${row[0]} - ${row[1]}</option>`;
         });
       });
     }
@@ -275,17 +347,18 @@
       const tbody = document.querySelector('#teacherTable tbody');
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>${row[3]}</td><td>${row[2]}</td></tr>`;
+        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5]}</td><td>₹ ${row[7] || 0}</td><td>${row[3]}</td></tr>`;
       });
     }
 
     function handleTeacherSubmit(e) {
       e.preventDefault();
-      showAlert("Saving...", false);
+      showAlert("Saving Teacher...", false);
       const payload = {
         action: "saveTeacher",
         admNo: document.getElementById('admNo').value,
         name: document.getElementById('tName').value,
+        basicSalary: document.getElementById('tBasicSalary').value,
         aadhaar: document.getElementById('aadhaar').value,
         phone: document.getElementById('phone').value,
         address: document.getElementById('address').value,
@@ -293,20 +366,24 @@
         joiningDate: document.getElementById('joiningDate').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { showAlert("Teacher Saved!"); document.getElementById('teacherForm').reset(); loadTeachers(); });
+        .then(() => { showAlert("Teacher Saved Successfully!"); document.getElementById('teacherForm').reset(); loadTeachers(); loadSalaryMaster(); });
     }
 
     function handleAttendanceSubmit(e) {
       e.preventDefault();
-      showAlert("Marking...", false);
+      showAlert("Marking Attendance...", false);
       const sel = document.getElementById('attTeacherSelect');
+      const timeInVal = document.getElementById('timeIn').value;
+      const timeOutVal = document.getElementById('timeOut').value;
+      
       const payload = {
         action: "markAttendance",
         date: document.getElementById('attDate').value,
         admNo: sel.value,
         name: sel.options[sel.selectedIndex].getAttribute('data-name'),
-        timeIn: document.getElementById('timeIn').value,
-        timeOut: document.getElementById('timeOut').value,
+        timeIn: format12HourTime(timeInVal),
+        timeOut: format12HourTime(timeOutVal),
+        duration: calculateDuration(timeInVal, timeOutVal),
         status: document.getElementById('attStatus').value
       };
       fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
@@ -321,10 +398,10 @@
           tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
             data.slice(1).reverse().forEach(row => {
-              tbody.innerHTML += `<tr><td>${cleanFormat(row[0])}</td><td>${row[1]}</td><td>${row[2]}</td><td>${cleanFormat(row[3])}</td><td>${cleanFormat(row[4])}</td><td>${row[5]}</td></tr>`;
+              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td><td>${row[6]}</td></tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No records.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No attendance records found.</td></tr>';
           }
         });
     }
@@ -347,26 +424,33 @@
     }
 
     function autoFillSalaryStructure() {
-      const admNo = document.getElementById('salTeacherSelect').value;
+      const sel = document.getElementById('salTeacherSelect');
+      const admNo = sel.value;
+      const opt = sel.options[sel.selectedIndex];
       const match = salaryMasterData.find(r => r[0] == admNo);
+
       if (match) {
         document.getElementById('basicSal').value = match[2];
         document.getElementById('allowanceSal').value = match[3];
         document.getElementById('deductionSal').value = match[4];
         document.getElementById('netSal').value = match[5];
-      } else {
-        document.getElementById('basicSal').value = '';
+      } else if (opt) {
+        document.getElementById('basicSal').value = opt.getAttribute('data-basic') || 0;
         document.getElementById('allowanceSal').value = '0';
         document.getElementById('deductionSal').value = '0';
-        document.getElementById('netSal').value = '';
+        calcNetSalary();
       }
     }
 
     function autoFillPayAmount() {
-      const admNo = document.getElementById('payTeacherSelect').value;
+      const sel = document.getElementById('payTeacherSelect');
+      const admNo = sel.value;
       const match = salaryMasterData.find(r => r[0] == admNo);
       if (match) {
         document.getElementById('payAmount').value = match[5];
+      } else {
+        const opt = sel.options[sel.selectedIndex];
+        document.getElementById('payAmount').value = opt ? opt.getAttribute('data-basic') : '';
       }
     }
 
@@ -412,10 +496,10 @@
           tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
             data.slice(1).reverse().forEach(row => {
-              tbody.innerHTML += `<tr><td>${cleanFormat(row[0])}</td><td>${row[1]}</td><td>${row[2]}</td><td>${cleanFormat(row[3])}</td><td>₹${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
+              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>₹ ${row[4]}</td><td>${row[5]}</td><td><span style="color:green;font-weight:bold;">${row[6]}</span></td></tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payments found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No payment history found.</td></tr>';
           }
         });
     }
@@ -423,21 +507,31 @@
     function generatePayslip() {
       const sel = document.getElementById('reportTeacherSelect');
       const month = document.getElementById('reportMonth').value;
-      if(!sel.value || !month) { alert("Select Teacher and Month"); return; }
+      if(!sel.value || !month) { alert("Please select Teacher and Month"); return; }
 
-      document.getElementById('psName').innerText = sel.options[sel.selectedIndex].getAttribute('data-name');
-      document.getElementById('psAdmNo').innerText = sel.value;
+      const admNo = sel.value;
+      const tName = sel.options[sel.selectedIndex].getAttribute('data-name');
+      const salMatch = salaryMasterData.find(r => r[0] == admNo);
+
+      document.getElementById('psName').innerText = tName;
+      document.getElementById('psAdmNo').innerText = admNo;
       document.getElementById('psMonth').innerText = month;
+      document.getElementById('psDate').innerText = new Date().toLocaleDateString();
 
       fetch(SCRIPT_URL + "?action=getPayments")
         .then(res => res.json())
         .then(data => {
           let paidAmount = "0";
           if (Array.isArray(data) && data.length > 1) {
-            const match = data.find(r => r[1] == sel.value && cleanFormat(r[3]) === month);
+            const match = data.find(r => r[1] == admNo && r[3] === month);
             if(match) paidAmount = match[4];
           }
+
+          document.getElementById('psBasic').innerText = "₹ " + (salMatch ? salMatch[2] : 0);
+          document.getElementById('psAllowance').innerText = "₹ " + (salMatch ? salMatch[3] : 0);
+          document.getElementById('psDeduction').innerText = "₹ " + (salMatch ? salMatch[4] : 0);
           document.getElementById('psAmount').innerText = "₹ " + paidAmount;
+
           document.getElementById('printablePayslip').style.display = 'block';
         });
     }
