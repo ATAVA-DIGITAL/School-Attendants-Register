@@ -37,7 +37,8 @@
     .form-group input, .form-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
 
     .btn-submit { background: #28a745; color: white; border: none; padding: 10px 15px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; }
-    .btn-danger { background: #dc3545; color: white; border: none; padding: 5px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    .btn-danger-sm { background: #dc3545; color: white; border: none; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    .btn-danger-sm:hover { background: #c82333; }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
@@ -140,13 +141,10 @@
         </form>
       </div>
       <div class="card">
-        <h2>
-          <span>Daily Attendance History</span>
-          <button onclick="clearAttendanceHistory()" class="btn-danger">Clear History</button>
-        </h2>
+        <h2>Daily Attendance History</h2>
         <table id="attendanceTable">
-          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Work Hours</th><th>Status</th></tr></thead>
-          <tbody><tr><td colspan="7" style="text-align:center;">Loading...</td></tr></tbody>
+          <thead><tr><th>Date</th><th>Adm No</th><th>Name</th><th>Time In</th><th>Time Out</th><th>Work Hours</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody><tr><td colspan="8" style="text-align:center;">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -260,7 +258,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEv5VssDBOEq-IzWnzdx-xrSP6wSvF6B1kxLSfG3vK5GCmDk3nqQIb8PwEa5C8vnMkYQ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR4GZN3Dj1F-JBK8Mo30k_1x_PiGUpVPbAmM4EJUx8BuwQRntqIHMCM0Ui1CytWVaRPw/exec";
     let teachersData = [];
     let salaryMasterData = [];
 
@@ -333,16 +331,29 @@
         if(!select) return;
         select.innerHTML = '<option value="">Select...</option>';
         teachersData.forEach(row => {
-          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}" data-basic="${row[2] || 0}">${row[0]} - ${row[1]}</option>`;
+          select.innerHTML += `<option value="${row[0]}" data-name="${row[1]}" data-basic="${row[7] || row[2] || 0}">${row[0]} - ${row[1]}</option>`;
         });
       });
     }
 
+    // Google Sheet Columns: 0: AdmNo, 1: Name, 2: Aadhaar, 3: Phone, 4: Address, 5: Designation, 6: JoiningDate, 7: BasicSalary
     function renderTeacherTable() {
       const tbody = document.querySelector('#teacherTable tbody');
       tbody.innerHTML = '';
       teachersData.forEach(row => {
-        tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[5] || 'Teacher'}</td><td>₹ ${row[2] || 0}</td><td>${row[3] || '-'}</td></tr>`;
+        let admNo = row[0] || '';
+        let name = row[1] || '';
+        let designation = row[5] || 'Teacher';
+        let basic = row[7] || row[2] || '0'; 
+        let phone = row[3] || '';
+
+        tbody.innerHTML += `<tr>
+          <td>${admNo}</td>
+          <td>${name}</td>
+          <td>${designation}</td>
+          <td>₹ ${basic}</td>
+          <td>${phone}</td>
+        </tr>`;
       });
     }
 
@@ -392,20 +403,37 @@
           const tbody = document.querySelector('#attendanceTable tbody');
           tbody.innerHTML = '';
           if (Array.isArray(data) && data.length > 1) {
-            data.slice(1).reverse().forEach(row => {
-              tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td><td>${row[6]}</td></tr>`;
+            // Google Sheet-ലെ തനതായ റോ സൂചിക സൂക്ഷിച്ചുവെക്കുന്നു
+            let rows = data.slice(1).map((row, index) => ({ rowData: row, originalIndex: index + 2 }));
+            rows.reverse().forEach(item => {
+              let r = item.rowData;
+              tbody.innerHTML += `<tr>
+                <td>${r[0]}</td>
+                <td>${r[1]}</td>
+                <td>${r[2]}</td>
+                <td>${r[3]}</td>
+                <td>${r[4]}</td>
+                <td>${r[5]}</td>
+                <td>${r[6]}</td>
+                <td><button onclick="deleteSingleAttendance(${item.originalIndex})" class="btn-danger-sm">Delete 🗑️</button></td>
+              </tr>`;
             });
           } else {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No attendance records found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No attendance records found.</td></tr>';
           }
         });
     }
 
-    function clearAttendanceHistory() {
-      if(confirm("Daily Attendance History മുഴുവനായി മായ്ക്കണോ?")) {
-        showAlert("Clearing Attendance...", false);
-        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "clearAttendance" }) })
-          .then(() => { showAlert("Attendance History Cleared!"); loadAttendanceHistory(); });
+    function deleteSingleAttendance(rowIndex) {
+      if(confirm("ഈ ഹാജർ എന്റ്രി മാത്രം മായ്ക്കണോ?")) {
+        showAlert("Deleting Entry...", false);
+        fetch(SCRIPT_URL, { 
+          method: "POST", 
+          body: JSON.stringify({ action: "deleteAttendanceRow", rowIndex: rowIndex }) 
+        }).then(() => { 
+          showAlert("Entry Deleted Successfully!"); 
+          loadAttendanceHistory(); 
+        });
       }
     }
 
